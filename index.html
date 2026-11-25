@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Writing Task 1 · Man-made Process</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#FFF8F1;--ink:#1F2A44;--muted:#5B6478;--coral:#E8735A;--coral-d:#C9553C;--peach:#FDE3D6;--teal:#2A9D8F;--blue:#2F6FDB;--amber:#F2A541;--green:#3FA34D;--red:#D64545;--line:#EADFD6;--orange:#F07F22}
+html,body{margin:0;height:100%;background:var(--bg) !important;color:var(--ink) !important;color-scheme:light}
+body{font-family:'Be Vietnam Pro','Segoe UI',system-ui,-apple-system,sans-serif;overflow:hidden;font-size:clamp(16px,1.62vw,34px);line-height:1.38}
+button{font-family:inherit}
+.blob{position:fixed;z-index:0;pointer-events:none}
+/* top bar */
+#top{position:fixed;top:0;left:0;right:0;height:7vh;min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 1.6vw;z-index:30}
+#brand{display:flex;align-items:center;gap:.6em;font-weight:700;font-size:.72em;color:var(--muted)}
+#brand .dot{width:.9em;height:.9em;border-radius:50%;background:var(--coral)}
+#sec{font-weight:800;color:var(--coral-d);font-size:.72em;letter-spacing:.08em;text-transform:uppercase}
+#tools{display:flex;gap:.5em}
+.tbtn{display:flex;align-items:center;gap:.4em;background:#fff;border:2px solid var(--line);color:var(--ink);border-radius:999px;padding:.3em .85em;font-weight:700;font-size:.68em;cursor:pointer}
+.tbtn:hover{border-color:var(--coral)}
+.tbtn svg{width:1.2em;height:1.2em}
+.tbtn.call{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* slides */
+#deck{position:fixed;inset:0;z-index:1}
+.slide{position:absolute;top:8vh;bottom:8.5vh;left:3vw;right:3vw;display:none;flex-direction:column}
+.slide.active{display:flex;animation:fin .35s ease}
+@keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide h2{font-size:2em;margin:0 0 .35em;text-align:center;font-weight:800;line-height:1.15}
+.slide h2 small{display:block;font-size:.42em;font-weight:700;color:var(--coral-d);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35em}
+.sb{flex:1;min-height:0;display:flex;align-items:safe center;justify-content:safe center;gap:2.2vw;overflow:auto}
+.col{display:flex;flex-direction:column;gap:1.2vh}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 24px rgba(31,42,68,.07);padding:1em 1.3em}
+.btn{border:0;border-radius:999px;padding:.5em 1.15em;font-weight:700;font-size:.78em;cursor:pointer;background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:.4em;transition:transform .1s}
+.btn:active{transform:scale(.96)}
+.btn.coral{background:var(--coral)}
+.btn.teal{background:var(--teal)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.btn.sm{font-size:.66em;padding:.4em .9em}
+.row{display:flex;gap:.6em;align-items:center;flex-wrap:wrap;justify-content:center}
+.hid{visibility:hidden}
+.muted{color:var(--muted)}
+.tag{display:inline-block;background:var(--peach);color:var(--coral-d);font-weight:800;border-radius:8px;padding:.1em .5em;font-size:.8em}
+/* section title */
+.sect .sb{flex-direction:column;gap:1vh}
+.sect .num{font-size:7em;font-weight:800;color:var(--coral);line-height:1;opacity:.9}
+.sect .ttl{font-size:3em;font-weight:800;text-align:center;line-height:1.1}
+.sect .sub{font-size:1.1em;color:var(--muted)}
+/* cover */
+.cover .sb{flex-direction:column;gap:2vh}
+.cover .big{font-size:4.3em;font-weight:800;line-height:1.02;text-align:center}
+.cover .big span{color:var(--coral)}
+.cover .ic{width:9vw;height:9vw}
+.badge{display:inline-flex;align-items:center;gap:.5em;background:#fff;border:2px solid var(--line);border-radius:999px;padding:.35em 1em;font-weight:700;color:var(--muted);font-size:.8em}
+/* scoreboard */
+#score{position:fixed;right:1.4vw;bottom:1.3vh;display:flex;gap:.45em;z-index:30}
+.tm{display:flex;align-items:center;gap:.45em;background:#fff;border:2px solid;border-radius:12px;padding:.18em .7em;font-size:.72em;font-weight:700;cursor:pointer;position:relative}
+.tm b{font-size:1.35em;min-width:1.6em;text-align:right}
+.tm.hot{box-shadow:0 0 0 3px rgba(232,115,90,.35)}
+.fly{position:fixed;font-weight:800;font-size:1.6em;pointer-events:none;z-index:90;animation:fly 1.2s ease forwards}
+@keyframes fly{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-70px)}}
+/* nav */
+#nav{position:fixed;left:1.4vw;bottom:1.3vh;display:flex;align-items:center;gap:.5em;z-index:30}
+#nav button{width:2.2em;height:2.2em;border-radius:50%;border:2px solid var(--line);background:#fff;cursor:pointer;font-size:.8em;display:flex;align-items:center;justify-content:center}
+#nav button svg{width:1.1em;height:1.1em}
+#count{font-size:.66em;font-weight:700;color:var(--muted)}
+/* modal */
+#ov{position:fixed;inset:0;background:rgba(31,42,68,.45);display:none;align-items:center;justify-content:center;z-index:80}
+#ov.on{display:flex}
+#mbox{background:#fff;border-radius:26px;padding:2em 2.4em;min-width:38vw;max-width:80vw;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.25);animation:pop .3s ease}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.callname{font-size:3.4em;font-weight:800;line-height:1.1;margin:.2em 0}
+.callteam{display:inline-flex;align-items:center;gap:.5em;font-weight:800;font-size:1.1em;padding:.25em .9em;border-radius:999px;color:#fff}
+.av{width:1.6em;height:1.6em;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex:none}
+.av img,.av svg{width:100%;height:100%;object-fit:cover}
+.gifts{display:flex;gap:2vw;justify-content:center;margin:1em 0}
+.gift{width:10vw;height:10vw;cursor:pointer;transition:transform .2s}
+.gift:hover{transform:translateY(-6px) rotate(-3deg)}
+.gres{font-size:2.6em;font-weight:800;margin:.2em 0}
+/* award bar */
+.award{display:flex;gap:.5em;justify-content:center;flex-wrap:wrap;align-items:center}
+.award .lb{font-size:.66em;font-weight:700;color:var(--muted)}
+.aw{border:0;border-radius:999px;color:#fff;font-weight:800;font-size:.68em;padding:.4em .9em;cursor:pointer;display:inline-flex;gap:.4em;align-items:center}
+.aw.called{outline:3px solid var(--ink);outline-offset:2px}
+.aw:disabled{opacity:.35;cursor:default}
+/* q rows */
+.qrow{display:flex;gap:.8em;align-items:flex-start;padding:.55em .8em;border-radius:14px;cursor:pointer;background:#fff;border:2px solid var(--line);margin-bottom:.5em}
+.qrow:hover{border-color:var(--coral)}
+.qrow .qn{flex:none;width:1.6em;height:1.6em;border-radius:50%;background:var(--coral);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.8em}
+.qrow .qa{display:none;color:var(--teal);font-weight:700;margin-top:.2em}
+.qrow.open .qa{display:block}
+.qrow.open{border-color:var(--teal)}
+/* panes */
+.panes{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);gap:2vw;width:100%;height:100%}
+.pane{overflow:auto;min-height:0;padding:.3em .4em}
+.pane{font-size:1.02em}
+.pane h3{margin:.1em 0 .5em;font-size:1.05em}
+/* diagrams */
+.dg{width:100%;height:100%;max-height:100%}
+.dg .stg{transition:opacity .45s,filter .45s}
+.dg.focus .stg{opacity:.16}
+.dg.focus .stg.on{opacity:1;filter:drop-shadow(0 0 10px rgba(232,115,90,.85))}
+.dgwrap{background:#fff;border:1px solid var(--line);border-radius:20px;padding:.6em;display:flex;align-items:center;justify-content:center;min-height:0}
+/* model text */
+.sent{padding:.55em .8em;border-radius:14px;margin-bottom:.5em;border:2px solid transparent;cursor:pointer;font-size:1.02em;line-height:1.45}
+.sent.cur{background:#fff;border-color:var(--coral);box-shadow:0 6px 18px rgba(232,115,90,.15)}
+.sent.later{display:none}
+.lang .pv{color:var(--blue);background:rgba(47,111,219,.08);border-radius:4px}
+.lang .lk{color:var(--coral-d);background:rgba(232,115,90,.12);border-radius:4px}
+.sent b,.txt b{font-weight:inherit}
+.legend{font-size:.7em;font-weight:700}
+.legend .a{color:var(--blue)}.legend .b{color:var(--coral-d)}
+/* mcq */
+.mcq{width:min(78vw,1450px);font-size:1.12em}
+.mq-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6em}
+.dots{display:flex;gap:.35em}
+.dots i{width:.6em;height:.6em;border-radius:50%;background:var(--line);display:block}
+.dots i.d{background:var(--teal)}.dots i.c{background:var(--coral)}
+.mq-stem{font-size:1.35em;font-weight:700;text-align:center;margin:.3em 0 .2em;line-height:1.35}
+.mq-pre{text-align:center;color:var(--muted);font-weight:600}
+.mq-opts{display:grid;gap:.6em;margin-top:.9em}
+.opt{background:#fff;border:2px solid var(--line);border-radius:16px;padding:.6em 1em;font-size:1.08em;cursor:pointer;text-align:left;font-weight:600;color:var(--ink);display:flex;gap:.7em;align-items:center}
+.opt .l{flex:none;width:1.6em;height:1.6em;border-radius:50%;background:var(--peach);color:var(--coral-d);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8em}
+.opt:hover{border-color:var(--coral)}
+.opt.ok{border-color:var(--green);background:#EAF7EC}
+.opt.no{border-color:var(--red);background:#FCECEC;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.mq-exp{margin-top:.7em;text-align:center;color:var(--teal);font-weight:700;min-height:1.4em}
+.mq-nav{display:flex;justify-content:space-between;align-items:center;margin-top:.8em}
+.gap{display:inline-block;min-width:4.5em;border-bottom:3px solid var(--coral);text-align:center;color:var(--coral-d)}
+/* mystery */
+.myst{display:grid;grid-template-columns:repeat(4,1fr) 1.15fr;gap:1.2vw;width:100%;align-items:stretch}
+.clue{perspective:900px;min-height:58vh;cursor:pointer}
+.clue .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.clue.f .in{transform:rotateY(180deg)}
+.clue .fa,.clue .ba{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1em;text-align:center}
+.clue .fa{background:var(--coral);color:#fff;font-size:3em;font-weight:800;box-shadow:0 8px 20px rgba(232,115,90,.3)}
+.clue .fa span{font-size:.28em;font-weight:700;opacity:.9}
+.clue .ba{background:#fff;border:2px solid var(--line);transform:rotateY(180deg);gap:.6em;font-weight:600;font-size:.95em}
+.clue .ba svg{width:62%;height:auto;max-height:22vh}
+.ans{border-radius:20px;border:3px dashed var(--coral);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1em;background:#fff}
+.ans svg{width:70%;max-height:22vh}
+.ans .anm{font-size:1.7em;font-weight:800;color:var(--coral-d)}
+.ptsnow{font-size:1.1em;font-weight:800}
+.ptsnow b{color:var(--coral);font-size:1.5em}
+/* compare cards */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:2vw;width:100%}
+.cmp .card{display:flex;align-items:center;gap:1em}
+.cmp .card.rules{display:grid;font-size:1.05em}
+.tk>div{padding:.35em 0;border-bottom:1px dashed var(--line)}
+.cmp svg{width:7vw;height:7vw;flex:none}
+.cmp .lbl{font-size:.7em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cmp .s{font-size:1.45em;font-weight:700}
+u.v{text-decoration:none;border-bottom:4px solid var(--coral)}
+/* formula */
+.formula{display:flex;gap:.6em;align-items:center;justify-content:center;font-size:1.6em;font-weight:800;flex-wrap:wrap}
+.formula .p{background:#fff;border:3px solid var(--ink);border-radius:14px;padding:.2em .7em}
+.formula .p.c{border-color:var(--coral);color:var(--coral-d)}
+.formula .p.b{border-color:var(--blue);color:var(--blue)}
+.ex{display:grid;grid-template-columns:auto auto 1fr;gap:.35em .7em;font-size:1.2em;align-items:center}
+.ex .o{font-weight:700}.ex .be{color:var(--coral-d);font-weight:800}.ex .vp{color:var(--blue);font-weight:800}
+.rules{display:grid;gap:.5em;font-size:1em}
+.rules div{display:flex;gap:.6em;align-items:flex-start}
+.rules svg{width:1.3em;height:1.3em;flex:none;margin-top:.1em}
+/* flip */
+.flips{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vw;width:min(84vw,1500px)}
+.flip{perspective:900px;height:28vh;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.f .in{transform:rotateY(180deg)}
+.flip .fa,.flip .ba{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.6em}
+.flip .fa{background:#fff;border:2px solid var(--line);font-size:2.1em;font-weight:800}
+.flip .fa span{font-size:.34em;color:var(--muted);font-weight:700}
+.flip .ba{background:var(--ink);color:#fff;transform:rotateY(180deg);font-size:2.1em;font-weight:800}
+.flip .ba span{font-size:.36em;font-weight:500;opacity:.9;margin-top:.3em;line-height:1.3}
+/* verb cards */
+.verbs{display:grid;grid-template-columns:1fr 1fr;gap:1.6vw;width:min(84vw,1500px)}
+.vc{display:flex;gap:1em;align-items:center;cursor:pointer;min-height:27vh}
+.vc svg{width:9vw;height:9vw;flex:none}
+.vc .w{font-size:1.7em;font-weight:800;line-height:1.1}
+.vc .w i{font-style:normal;font-size:.6em;color:var(--muted);font-weight:700}
+.vc .e{display:none;font-size:.98em;margin-top:.35em}
+.vc .m{display:none;color:var(--teal);font-weight:800;margin-top:.25em}
+.vc.s1 .e,.vc.s2 .e,.vc.s2 .m{display:block}
+.vc.s1,.vc.s2{border-color:var(--coral)}
+/* error hunt */
+.eh{width:min(80vw,1400px);text-align:center}
+.eh .sen{font-size:2.1em;font-weight:600;line-height:1.7;margin:.6em 0}
+.tok{cursor:pointer;border-radius:8px;padding:0 .12em;transition:background .2s}
+.tok:hover{background:var(--peach)}
+.tok.bad{background:#FCECEC;color:var(--red);text-decoration:line-through;animation:shake .35s}
+.tok.right{background:#EAF7EC;color:var(--green);text-decoration:line-through}
+.fix{font-size:1.3em;font-weight:700;color:var(--green);min-height:1.6em}
+/* builder */
+.bld{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:minmax(0,1fr);gap:2vw;width:100%;height:100%}
+.bld .right{display:flex;flex-direction:column;justify-content:safe center;gap:1vh;overflow:auto;min-height:0;font-size:.86em}
+.dgwrap svg{height:auto;max-height:100%}
+.bld .right>*{flex-shrink:0}
+.kws{display:flex;flex-wrap:wrap;gap:.45em}
+.kw{background:#fff;border:2px solid var(--ink);border-radius:10px;padding:.15em .6em;font-weight:700}
+.need{font-weight:700;color:var(--coral-d)}
+.chunks,.answer{display:flex;flex-wrap:wrap;gap:.45em;min-height:2.6em;align-items:center}
+.answer{border:2px dashed var(--line);border-radius:14px;padding:.5em;background:#fff}
+.chunk{background:var(--peach);border:2px solid var(--coral);border-radius:10px;padding:.2em .6em;cursor:pointer;font-weight:600}
+.answer .chunk{background:#fff;border-color:var(--blue)}
+.model{font-size:1em;font-weight:600;background:#EAF7EC;border-radius:14px;padding:.6em .9em;display:none}
+.model.on{display:block}
+.answer.ok{border-color:var(--green);background:#EAF7EC}
+.answer.no{border-color:var(--red);animation:shake .35s}
+/* setup */
+.setup{display:grid;grid-template-columns:22% 1fr;gap:1.5vw;width:100%;height:100%}
+.setup textarea{width:100%;flex:1;min-height:0;border:2px solid var(--line);border-radius:14px;padding:.6em;font-family:inherit;font-size:.75em;resize:none;background:#fff;color:var(--ink)}
+.teams{display:grid;gap:1vw;min-height:0}
+.tcol{background:#fff;border:2px solid var(--line);border-radius:18px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.tcol .th{display:flex;align-items:center;gap:.5em;padding:.5em .7em;color:#fff}
+.tcol .th input{flex:1;min-width:0;border:0;border-radius:8px;padding:.25em .5em;font-family:inherit;font-weight:800;font-size:.8em;color:var(--ink);background:rgba(255,255,255,.92)}
+.tcol .th .av{width:2.1em;height:2.1em;cursor:pointer;border:2px solid #fff}
+.zone{flex:1;overflow:auto;padding:.5em;display:flex;flex-wrap:wrap;gap:.35em;align-content:flex-start;min-height:3em}
+.zone.over{background:var(--peach)}
+.nm{background:var(--bg);border:1.5px solid var(--line);border-radius:999px;padding:.12em .65em;font-size:.68em;font-weight:600;cursor:grab;user-select:none}
+.pool{border:2px dashed var(--line);border-radius:14px;background:#fff;max-height:22vh}
+.tcount button{width:2em;height:2em;border-radius:10px;border:2px solid var(--line);background:#fff;font-weight:800;cursor:pointer;font-size:.8em}
+.tcount button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.avgrid{display:grid;grid-template-columns:repeat(5,4.2em);gap:.6em;justify-content:center;margin:1em 0}
+.avgrid .av{width:4.2em;height:4.2em;cursor:pointer;border:3px solid var(--line)}
+.avgrid .av:hover{border-color:var(--coral)}
+/* podium */
+.pod{display:flex;gap:3vw;align-items:flex-end;justify-content:center;height:52vh}
+.pod .p{display:flex;flex-direction:column;align-items:center;gap:.4em;width:13vw}
+.pod .bar{width:100%;border-radius:16px 16px 0 0;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:2.2em;font-weight:800;padding-top:.3em;transition:height 1s}
+.pod .n{font-weight:800;font-size:1.1em;text-align:center}
+.pod .av{width:4em;height:4em;border:3px solid var(--line)}
+.conf{position:fixed;top:-20px;width:12px;height:18px;z-index:95;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+/* checklist */
+.chk{display:grid;grid-template-columns:1fr 1fr;gap:.6em 2vw;width:min(84vw,1500px)}
+.chk label{display:flex;gap:.7em;align-items:flex-start;background:#fff;border:2px solid var(--line);border-radius:14px;padding:.55em .8em;cursor:pointer;font-size:.98em}
+.chk input{width:1.2em;height:1.2em;accent-color:var(--teal);margin-top:.15em;flex:none}
+.toast{position:fixed;left:50%;top:9vh;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.6em 1.2em;border-radius:999px;font-weight:700;z-index:99;font-size:.85em}
+.map{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5vw;width:min(86vw,1500px)}
+.map .card{display:flex;gap:.9em;align-items:center;min-height:28vh;font-size:1.1em}
+.map .n{font-size:2.6em;font-weight:800;color:var(--coral);line-height:1}
+.map .t{font-size:1.2em;font-weight:800}
+.map .d{font-size:.85em;color:var(--muted)}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw;width:min(84vw,1500px)}
+.howto .card{text-align:center;min-height:50vh;font-size:1.1em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6em}
+.howto svg{width:7vw;height:7vw}
+.howto .t{font-size:1.25em;font-weight:800}
+</style>
+</head>
+<body>
+<svg class="blob" style="left:-8vw;top:-10vh;width:30vw" viewBox="0 0 200 200"><path fill="#FDE3D6" d="M45,-58C58,-47,68,-32,72,-15C76,2,74,21,64,35C54,49,36,58,17,64C-2,70,-22,73,-38,65C-54,57,-66,38,-71,18C-76,-2,-74,-23,-63,-38C-52,-53,-32,-62,-13,-66C6,-70,32,-69,45,-58Z" transform="translate(100 100)"/></svg>
+<svg class="blob" style="right:-10vw;bottom:-14vh;width:34vw" viewBox="0 0 200 200"><path fill="#FCD5C4" opacity=".7" d="M39,-52C51,-41,60,-27,66,-10C72,7,74,27,65,41C56,55,35,63,15,67C-5,71,-24,71,-41,62C-58,53,-72,35,-74,16C-76,-3,-66,-22,-53,-36C-40,-50,-25,-59,-8,-61C9,-63,27,-63,39,-52Z" transform="translate(100 100)"/></svg>
+<svg class="blob" style="right:12vw;top:-6vh;width:12vw" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="#FDE3D6" opacity=".8"/></svg>
+
+<div id="top">
+  <div id="brand"><span class="dot"></span>Hoang Mai Star School · IELTS Writing Task 1</div>
+  <div id="sec"></div>
+  <div id="tools">
+    <button class="tbtn" id="bTeams" title="Team setup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9.5" r="2.4"/><path d="M3 19c.8-3.4 3.2-5 6-5s5.2 1.6 6 5M15 14.6c2.6-.4 4.8.9 5.6 3.9"/></svg>Teams</button>
+    <button class="tbtn" id="bSound" title="Sound on/off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="swave" d="M16 9c1.3 1.6 1.3 4.4 0 6M18.6 6.5c2.6 3 2.6 8 0 11"/></svg><span>Sound</span></button>
+    <button class="tbtn call" id="bCall"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 3.8-6 7-6s6 2 7 6"/></svg>Call a student</button>
+  </div>
+</div>
+
+<div id="deck">
+
+<!-- 1 COVER -->
+<section class="slide cover" data-sec="">
+  <div class="sb">
+    <div data-icon="factory" class="ic"></div>
+    <div class="badge">Writing Task 1 · Process diagrams · Lesson 2</div>
+    <div class="big">MAN-MADE<br><span>PROCESS</span></div>
+    <div class="muted" style="font-size:1.2em">How things are made: from raw materials to final products</div>
+    <div class="row"><button class="btn coral" onclick="go(1)">Set up teams</button><button class="btn ghost" onclick="go(2)">Start the lesson</button></div>
+  </div>
+</section>
+
+<!-- 2 SETUP -->
+<section class="slide" data-sec="Team setup" data-init="setup">
+  <h2><small>Before we start</small>Team setup</h2>
+  <div class="sb" style="align-items:stretch">
+    <div class="setup">
+      <div class="col" style="min-height:0">
+        <div style="font-weight:800;font-size:.8em">1 · Paste the class list</div>
+        <textarea id="names" placeholder="One student per line"></textarea>
+        <div class="row" style="justify-content:flex-start"><button class="btn sm" id="addNames">Add names</button><button class="btn sm ghost" id="clearNames">Clear all</button></div>
+        <div style="font-weight:800;font-size:.8em;margin-top:.4em">2 · Number of teams</div>
+        <div class="row tcount" id="tcount" style="justify-content:flex-start"></div>
+        <div style="font-weight:800;font-size:.8em;margin-top:.4em">3 · Drag names into teams</div>
+        <div class="row" style="justify-content:flex-start"><button class="btn sm teal" id="autoTeams">Shuffle evenly</button><button class="btn sm ghost" id="resetScores">Reset scores</button></div>
+        <div class="muted" style="font-size:.6em">Tip: click a name to move it to the next team. Click a team picture to change it.</div>
+      </div>
+      <div class="col" style="min-height:0">
+        <div class="teams" id="teamsBox" style="flex:1"></div>
+        <div style="font-weight:700;font-size:.66em" class="muted">Not in a team yet</div>
+        <div class="zone pool" id="pool" data-t="-1"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 MAP -->
+<section class="slide" data-sec="Today's lesson">
+  <h2><small>Today's lesson</small>From raw materials to final products</h2>
+  <div class="sb">
+    <div class="map">
+      <div class="card"><div class="n">1</div><div><div class="t">What is being made?</div><div class="d">Guess the product from the stages</div></div></div>
+      <div class="card"><div class="n">2</div><div><div class="t">The passive voice</div><div class="d">Why man-made processes need it</div></div></div>
+      <div class="card"><div class="n">3</div><div><div class="t">Process verbs</div><div class="d">crush, feed into, fire, filter …</div></div></div>
+      <div class="card"><div class="n">4</div><div><div class="t">Model: recycling paper</div><div class="d">Intro, overview, body, sentence by sentence</div></div></div>
+      <div class="card"><div class="n">5</div><div><div class="t">Linking the stages</div><div class="d">where · once · having been · before being</div></div></div>
+      <div class="card"><div class="n">6</div><div><div class="t">Your turn: making bricks</div><div class="d">Build the report sentence by sentence</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 1 -->
+<section class="slide sect" data-sec="Part 1 · Warm-up"><div class="sb"><div class="num">01</div><div class="ttl">What is being made?</div><div class="sub">Guess the product. The fewer clues you need, the more points you win.</div></div></section>
+
+<section class="slide" data-sec="Part 1 · Warm-up">
+  <h2><small>How to play</small>Guess the product</h2>
+  <div class="sb"><div class="howto">
+    <div class="card"><div data-icon="cards"></div><div class="t">1 · Open a clue</div><div>Each card shows one stage of a process.</div></div>
+    <div class="card"><div data-icon="hand"></div><div class="t">2 · Raise your hand</div><div>Name the product. The first correct team wins the points.</div></div>
+    <div class="card"><div data-icon="coins"></div><div class="t">3 · Earlier = more points</div><div>Clue 1: <b>40</b> · Clue 2: <b>30</b> · Clue 3: <b>20</b> · Clue 4: <b>10</b></div></div>
+  </div></div>
+</section>
+
+<section class="slide" data-sec="Part 1 · Warm-up"><h2><small>Mystery process 1</small>What is being made?</h2><div class="sb"><div class="myst" data-myst="0"></div></div></section>
+<section class="slide" data-sec="Part 1 · Warm-up"><h2><small>Mystery process 2</small>What is being made?</h2><div class="sb"><div class="myst" data-myst="1"></div></div></section>
+<section class="slide" data-sec="Part 1 · Warm-up"><h2><small>Mystery process 3</small>What is being made?</h2><div class="sb"><div class="myst" data-myst="2"></div></div></section>
+
+<!-- PART 2 -->
+<section class="slide sect" data-sec="Part 2 · Passive voice"><div class="sb"><div class="num">02</div><div class="ttl">The passive voice</div><div class="sub">Look at the clues again. What do the verbs have in common?</div></div></section>
+
+<section class="slide" data-sec="Part 2 · Passive voice">
+  <h2><small>Discover</small>Natural vs man-made</h2>
+  <div class="sb" style="flex-direction:column;gap:2.4vh">
+    <div class="cmp">
+      <div class="card"><div data-icon="frog"></div><div><div class="lbl">Last lesson · Natural process</div><div class="s">The eggs <u class="v">hatch</u> into tadpoles.</div></div></div>
+      <div class="card"><div data-icon="sunbeans"></div><div><div class="lbl">Today · Man-made process</div><div class="s">The beans <u class="v">are roasted</u>.</div></div></div>
+    </div>
+    <div style="width:100%">
+      <div class="qrow"><div class="qn">1</div><div>Who does the action in each sentence?<div class="qa">Natural: the eggs do it themselves. Man-made: people or machines do it.</div></div></div>
+      <div class="qrow"><div class="qn">2</div><div>Why don't we write <i>"Workers roast the beans"</i>?<div class="qa">The doer is not important. The focus is the material (the beans), so we use the passive.</div></div></div>
+      <div class="qrow"><div class="qn">3</div><div>Look at <i>are roasted</i>. What is the pattern?<div class="qa">be (is / are) + past participle (VpII)</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 2 · Passive voice">
+  <h2><small>The rule</small>Passive voice in a process</h2>
+  <div class="sb" style="flex-direction:column;gap:3vh">
+    <div class="formula"><span class="p">Material / product</span>+<span class="p c">is / are</span>+<span class="p b">VpII</span></div>
+    <div class="cmp" style="align-items:center">
+      <div class="card"><div class="ex">
+        <span class="o">The paste</span><span class="be">is</span><span class="vp">mixed <span class="muted" style="font-weight:600">with sugar.</span></span>
+        <span class="o">The beans</span><span class="be">are</span><span class="vp">roasted.</span>
+        <span class="o">The dough</span><span class="be">is then</span><span class="vp">baked <span class="muted" style="font-weight:600">in an oven.</span></span>
+      </div></div>
+      <div class="card rules">
+        <div><span data-icon="yes"></span><span>Always <b>present simple</b>: is / are + VpII</span></div>
+        <div><span data-icon="yes"></span><span><b>is / are + then + VpII</b> shows the order</span></div>
+        <div><span data-icon="yes"></span><span><b>by + machine</b> only when useful: <i>dug <b>by a digger</b></i></span></div>
+        <div><span data-icon="no"></span><span>Never <i>by workers</i> / <i>by people</i></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 2 · Passive voice">
+  <h2><small>Quick drill · say it before you flip</small>Irregular past participles</h2>
+  <div class="sb"><div class="flips" id="flips"></div></div>
+</section>
+
+<section class="slide" data-sec="Part 2 · Passive voice">
+  <h2><small>Practice · recycling glass bottles</small>Active → passive</h2>
+  <div class="sb"><div class="mcq" data-set="passive"></div></div>
+</section>
+
+<!-- PART 3 -->
+<section class="slide sect" data-sec="Part 3 · Process verbs"><div class="sb"><div class="num">03</div><div class="ttl">Process verbs</div><div class="sub">Click a card: first the example, then the meaning.</div></div></section>
+<section class="slide" data-sec="Part 3 · Process verbs"><h2><small>Process verbs 1</small>Making things smaller and mixing</h2><div class="sb"><div class="verbs" data-verbs="0"></div></div></section>
+<section class="slide" data-sec="Part 3 · Process verbs"><h2><small>Process verbs 2</small>Moving and cleaning</h2><div class="sb"><div class="verbs" data-verbs="1"></div></div></section>
+<section class="slide" data-sec="Part 3 · Process verbs"><h2><small>Process verbs 3</small>Heat and the final stages</h2><div class="sb"><div class="verbs" data-verbs="2"></div></div></section>
+<section class="slide" data-sec="Part 3 · Process verbs"><h2><small>Quick-fire</small>Choose the right verb</h2><div class="sb"><div class="mcq" data-set="verbs"></div></div></section>
+
+<!-- PART 4 -->
+<section class="slide sect" data-sec="Part 4 · Model"><div class="sb"><div class="num">04</div><div class="ttl">Model: recycling paper</div><div class="sub">First we analyse the diagram. Then we write.</div></div></section>
+
+<section class="slide" data-sec="Part 4 · Model">
+  <h2><small>The diagram below shows how recycled paper is made.</small>Analyse the diagram first</h2>
+  <div class="sb" style="align-items:stretch">
+    <div class="panes" style="grid-template-columns:1.25fr 1fr">
+      <div class="dgwrap" data-dg="paper"></div>
+      <div class="pane">
+        <div class="qrow"><div class="qn">1</div><div>How many main phases are there?<div class="qa">Four: making pulp, filtering, cleaning, making recycled paper.</div></div></div>
+        <div class="qrow"><div class="qn">2</div><div>What goes in? What comes out?<div class="qa">Used paper goes in. Rolls of recycled paper come out.</div></div></div>
+        <div class="qrow"><div class="qn">3</div><div>What is added to the paper?<div class="qa">Water and chemicals (phase 1); water and soap, plus air (phase 3).</div></div></div>
+        <div class="qrow"><div class="qn">4</div><div>What is removed?<div class="qa">Ink (cleaning) and water (under the heated rollers).</div></div></div>
+        <div class="qrow"><div class="qn">5</div><div>Linear or cyclical?<div class="qa">Linear: it goes in one direction, from used paper to a new product.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 4 · Model">
+  <h2><small>Paragraph 1</small>Introduction</h2>
+  <div class="sb" style="flex-direction:column;gap:2vh">
+    <div class="card" style="width:min(80vw,1400px)"><span class="tag">Question</span> The diagram <b>shows how recycled paper is made</b>.</div>
+    <div class="mcq" data-set="intro" style="width:min(80vw,1400px)"></div>
+    <div class="row"><button class="btn teal" data-show="#introModels">Show both model introductions</button></div>
+    <div id="introModels" class="hid col lang" style="width:min(80vw,1400px)">
+      <div class="card"><span class="tag">A</span> <b class="lk">The provided diagram illustrates the different stages in</b> recycling used paper into new paper products.</div>
+      <div class="card"><span class="tag">B</span> <b class="lk">The provided diagram illustrates how</b> used paper <b>is turned into</b> rolls of recycled paper through a series of mechanical and chemical stages.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 4 · Model">
+  <h2><small>Paragraph 2 · the overview must cover the middle stages too</small>Which overview is best?</h2>
+  <div class="sb" style="flex-direction:column;gap:2vh">
+    <div class="mcq" data-set="overview" style="width:min(86vw,1500px)"></div>
+    <div class="row"><button class="btn teal" data-show="#ovExtra">Add a special feature</button></div>
+    <div id="ovExtra" class="hid card lang" style="width:min(86vw,1500px)">… <b class="lk">It is a linear process</b> in which several substances are added, while waste such as ink and water <b>is removed</b> along the way.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 4 · Model">
+  <h2><small>Body paragraph 1 · phases 1–2</small>One sentence at a time</h2>
+  <div class="sb" style="align-items:stretch"><div class="panes mr" data-dg="paper" data-model="p1" style="grid-template-columns:1.15fr 1fr"></div></div>
+</section>
+
+<section class="slide" data-sec="Part 4 · Model">
+  <h2><small>Body paragraph 2 · phases 3–4</small>One sentence at a time</h2>
+  <div class="sb" style="align-items:stretch"><div class="panes mr" data-dg="paper" data-model="p2" style="grid-template-columns:1.15fr 1fr"></div></div>
+</section>
+
+<!-- PART 5 -->
+<section class="slide sect" data-sec="Part 5 · Linking"><div class="sb"><div class="num">05</div><div class="ttl">Linking the stages</div><div class="sub">Not "Then … Then … Then …", and not "after which" in every sentence.</div></div></section>
+
+<section class="slide" data-sec="Part 5 · Linking">
+  <h2><small>Discover</small>Which paragraph reads better?</h2>
+  <div class="sb" style="flex-direction:column;gap:2vh">
+    <div class="cmp" id="choppy">
+      <div class="card" style="display:block"><div class="lbl" style="font-size:.75em;font-weight:800;color:var(--muted)">VERSION A</div><div style="font-size:1.12em;margin-top:.4em">The pulp is transferred to a cleaning tank. Water and soap are added. <b>Then</b> air is pumped in. <b>Then</b> the ink is removed. <b>Then</b> the pulp is fed into a machine.</div></div>
+      <div class="card txt" style="display:block"><div class="lbl" style="font-size:.75em;font-weight:800;color:var(--muted)">VERSION B</div><div style="font-size:1.12em;margin-top:.4em">The pulp is transferred to a cleaning tank, <b class="lk">where</b> water and soap are added <b class="lk">and</b> air is pumped in <b class="lk">so that</b> the ink can be removed. <b class="lk">Once</b> the pulp <b class="lk">has been cleaned</b>, it is fed into a machine.</div></div>
+    </div>
+    <div class="row"><button class="btn coral" data-lang="#choppy">Highlight the linking words</button></div>
+    <div style="width:100%">
+      <div class="qrow"><div class="qn">?</div><div>Why is version B better?<div class="qa">Fewer, longer sentences · no repeated "Then" · it shows how the stages are connected (place, purpose, time).</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 5 · Linking">
+  <h2><small>Toolkit + practice</small>Join the stages</h2>
+  <div class="sb" style="align-items:stretch">
+    <div class="panes">
+      <div class="pane card">
+        <h3>Toolkit</h3>
+        <div class="tk" id="toolkit"></div>
+      </div>
+      <div class="pane card">
+        <h3>Join each pair <span class="muted" style="font-size:.7em">(use the word in brackets)</span></h3>
+        <div id="joins"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 5 · Linking">
+  <h2><small>Error hunt · click the mistake</small>Find and fix</h2>
+  <div class="sb"><div class="eh" id="eh"></div></div>
+</section>
+
+<!-- PART 6 -->
+<section class="slide sect" data-sec="Part 6 · Making bricks"><div class="sb"><div class="num">06</div><div class="ttl">Your turn: making bricks</div><div class="sub">Analyse first, then build each sentence in your notebook.</div></div></section>
+
+<section class="slide" data-sec="Part 6 · Making bricks">
+  <h2><small>The diagram illustrates the process used to manufacture bricks for the building industry.</small>Analyse the diagram first</h2>
+  <div class="sb" style="align-items:stretch">
+    <div class="panes" style="grid-template-columns:1.35fr 1fr">
+      <div class="dgwrap" data-dg="bricks"></div>
+      <div class="pane">
+        <div class="qrow"><div class="qn">1</div><div>How many stages are there?<div class="qa">Seven: digging, mixing, shaping, drying, firing, cooling, packaging and delivery.</div></div></div>
+        <div class="qrow"><div class="qn">2</div><div>First stage? Last stage?<div class="qa">Clay is dug from the ground → the bricks are packaged and delivered.</div></div></div>
+        <div class="qrow"><div class="qn">3</div><div>What is added?<div class="qa">Sand and water (stage 2).</div></div></div>
+        <div class="qrow"><div class="qn">4</div><div>Which numbers must you report?<div class="qa">Drying: 24–48 hours · Kiln: 200°C → 1,300°C · Cooling: 48–72 hours</div></div></div>
+        <div class="qrow"><div class="qn">5</div><div>Is there a choice at any stage?<div class="qa">Yes, stage 3: a mould OR a wire cutter.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Part 6 · Making bricks">
+  <h2><small>Introduction + overview</small>Build the sentences</h2>
+  <div class="sb" style="align-items:stretch"><div class="bld" data-build="bio"></div></div>
+</section>
+
+<section class="slide" data-sec="Part 6 · Making bricks">
+  <h2><small>Body paragraphs · write in your notebook first</small>Build the sentences</h2>
+  <div class="sb" style="align-items:stretch"><div class="bld" data-build="bbody"></div></div>
+</section>
+
+<!-- WRAP -->
+<section class="slide" data-sec="Results" data-onshow="podium">
+  <h2><small>Today's results</small>And the winner is …</h2>
+  <div class="sb" style="flex-direction:column"><div class="pod" id="pod"></div><button class="btn coral" id="celebrate">Celebrate</button></div>
+</section>
+
+<section class="slide" data-sec="Homework">
+  <h2><small>Homework</small>Write the full report: making bricks</h2>
+  <div class="sb" style="flex-direction:column;gap:2vh">
+    <div class="card" style="width:min(84vw,1500px);font-size:.95em">Con viết bài hoàn chỉnh (ít nhất <b>150 words</b>) vào vở và nộp cho Thầy Độ vào buổi học sau. Trước khi nộp, con tự kiểm tra theo danh sách dưới đây nhé.</div>
+    <div class="chk">
+      <label><input type="checkbox">Introduction: <i>The provided diagram illustrates …</i></label>
+      <label><input type="checkbox">Overview: number of stages + first + middle + last stage</label>
+      <label><input type="checkbox">Body 1: <i>With regard to the initial stages involved in …</i></label>
+      <label><input type="checkbox">Body 2: <i>Looking at the remaining stages, …</i></label>
+      <label><input type="checkbox">At least 6 passive verbs (is / are + VpII)</label>
+      <label><input type="checkbox">3+ linking structures: where · once · having been · before being · during which</label>
+      <label><input type="checkbox"><i>after which</i> used once at most, only in the body</label>
+      <label><input type="checkbox">Exact numbers: 24–48 hours · 200°C–1,300°C · 48–72 hours</label>
+      <label><input type="checkbox">Nothing invented: only what is on the diagram</label>
+      <label><input type="checkbox">All 7 stages are described</label>
+    </div>
+  </div>
+</section>
+
+<section class="slide cover" data-sec="">
+  <div class="sb"><div data-icon="bricks" class="ic"></div><div class="big">THANK <span>YOU</span></div><div class="muted" style="font-size:1.2em">See you next lesson!</div></div>
+</section>
+
+</div>
+
+<div id="nav">
+  <button id="prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="#1F2A44" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button id="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="#1F2A44" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+  <span id="count"></span>
+</div>
+<div id="score"></div>
+<div id="ov"><div id="mbox"></div></div>
+<input type="file" id="avUpload" accept="image/*" multiple style="display:none">
+<script>
+// ---------- SVG ICONS (flat, navy outline) ----------
+const K='stroke="#1F2A44" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+const NF='fill="none" '+K;
+const ICON={
+pod:`<path d="M50 8c-7 3-9 9-8 14" ${NF}/><path d="M50 14c10-10 24-8 30-4-8 8-20 9-30 4z" fill="#5BAA5B" ${K}/><ellipse cx="50" cy="58" rx="22" ry="34" fill="#C9772B" ${K}/><path d="M50 25v66M38 30c-5 18-5 38 0 56M62 30c5 18 5 38 0 56" ${NF}/>`,
+sunbeans:`<circle cx="32" cy="30" r="13" fill="#F6C343" ${K}/><path d="M32 8v6M32 46v6M10 30h6M48 30h6M17 15l4 4M43 41l4 4M17 45l4-4M43 19l4-4" ${NF}/><rect x="14" y="70" width="74" height="13" rx="4" fill="#C9A27A" ${K}/><g fill="#7A4A2A" ${K}><ellipse cx="30" cy="64" rx="7" ry="5"/><ellipse cx="46" cy="63" rx="7" ry="5"/><ellipse cx="62" cy="64" rx="7" ry="5"/><ellipse cx="76" cy="63" rx="6" ry="5"/></g>`,
+grinder:`<path d="M28 10h44l-12 24H40z" fill="#E8E2DA" ${K}/><g fill="#7A4A2A"><ellipse cx="44" cy="18" rx="4" ry="3"/><ellipse cx="54" cy="20" rx="4" ry="3"/></g><rect x="30" y="34" width="40" height="32" rx="6" fill="#8E9AAF" ${K}/><path d="M70 44h12v-8" ${NF}/><circle cx="82" cy="32" r="4" fill="#E8735A" ${K}/><path d="M44 66v8h12v-8" fill="#8E9AAF" ${K}/><path d="M34 90c0-8 8-12 16-12s16 4 16 12z" fill="#7A4A2A" ${K}/>`,
+mould:`<path d="M58 14l22 10-8 14-22-10z" fill="#DDE3EA" ${K}/><path d="M52 30c-2 8-6 14-6 22" fill="none" stroke="#7A4A2A" stroke-width="6" stroke-linecap="round"/><rect x="10" y="56" width="80" height="30" rx="6" fill="#E8E2DA" ${K}/><g fill="#7A4A2A" ${K}><rect x="18" y="63" width="18" height="16" rx="3"/><rect x="41" y="63" width="18" height="16" rx="3"/><rect x="64" y="63" width="18" height="16" rx="3"/></g>`,
+chocolate:`<g transform="rotate(-12 50 50)"><rect x="22" y="14" width="56" height="74" rx="6" fill="#7A4A2A" ${K}/><path d="M22 38h56M22 62h56M50 14v74" ${NF}/><path d="M22 58h56v24a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6z" fill="#D64545" ${K}/><path d="M30 70h40" stroke="#fff" stroke-width="3"/></g>`,
+wheat:`<path d="M50 92V30M34 92l8-50M66 92l-8-50" ${NF}/><g fill="#F2A541" ${K}><ellipse cx="50" cy="22" rx="6" ry="10"/><ellipse cx="42" cy="38" rx="5" ry="9" transform="rotate(-25 42 38)"/><ellipse cx="58" cy="38" rx="5" ry="9" transform="rotate(25 58 38)"/><ellipse cx="40" cy="32" rx="5" ry="9" transform="rotate(-10 40 32)"/><ellipse cx="60" cy="32" rx="5" ry="9" transform="rotate(10 60 32)"/></g>`,
+flour:`<path d="M26 26c6-6 42-6 48 0l6 56c0 8-60 8-60 0z" fill="#F4EBDD" ${K}/><path d="M30 22c4 6 36 6 40 0" ${NF}/><text x="50" y="66" text-anchor="middle" font-size="13" font-weight="800" fill="#1F2A44">FLOUR</text>`,
+bowl:`<path d="M60 10l-14 40" ${NF}/><path d="M42 44c-4 6 2 12 8 10s8-8 4-12" ${NF}/><path d="M12 50h76c0 22-16 38-38 38S12 72 12 50z" fill="#9FC4E8" ${K}/><path d="M20 50c6-8 54-8 60 0" fill="#F4EBDD" ${K}/>`,
+oven:`<rect x="12" y="14" width="76" height="74" rx="8" fill="#DDE3EA" ${K}/><rect x="22" y="34" width="56" height="42" rx="6" fill="#F6C343" ${K}/><path d="M34 66c0-6 6-8 6-14 4 4 6 8 6 14M52 66c0-6 6-8 6-14 4 4 6 8 6 14" fill="#E8735A" ${K}/><g fill="#1F2A44"><circle cx="26" cy="24" r="3"/><circle cx="38" cy="24" r="3"/></g>`,
+bread:`<path d="M14 62c0-22 14-34 36-34s36 12 36 34v14H14z" fill="#E3A15A" ${K}/><path d="M34 40l6 12M50 38l2 14M66 40l-4 12" ${NF}/><path d="M14 76h72" ${NF}/>`,
+cotton:`<path d="M50 92V56M50 70l-14-8M50 74l14-8" stroke="#7A4A2A" stroke-width="4" fill="none" stroke-linecap="round"/><g fill="#fff" ${K}><circle cx="38" cy="38" r="13"/><circle cx="62" cy="38" r="13"/><circle cx="50" cy="26" r="13"/><circle cx="50" cy="46" r="12"/></g>`,
+spool:`<rect x="24" y="14" width="52" height="10" rx="3" fill="#C9A27A" ${K}/><rect x="24" y="76" width="52" height="10" rx="3" fill="#C9A27A" ${K}/><rect x="30" y="24" width="40" height="52" fill="#2A9D8F" ${K}/><path d="M30 34h40M30 44h40M30 54h40M30 64h40" stroke="#1F2A44" stroke-width="1.6"/><path d="M70 60c10 6 14 14 10 24" ${NF}/>`,
+fabric:`<path d="M14 30h60l12 12v44H26L14 74z" fill="#9B5DE5" ${K}/><path d="M74 30v44H14M74 74l12 12" ${NF}/><path d="M24 40h40M24 50h40M24 60h40" stroke="#fff" stroke-width="3"/>`,
+scissors:`<circle cx="26" cy="72" r="11" fill="#fff" ${K}/><circle cx="54" cy="78" r="11" fill="#fff" ${K}/><path d="M34 64l46-48M46 70l30-52" fill="none" stroke="#8E9AAF" stroke-width="7" stroke-linecap="round"/><path d="M34 64l46-48M46 70l30-52" ${NF}/>`,
+tshirt:`<path d="M34 14l-22 14 10 18 10-6v48h36V40l10 6 10-18-22-14c-2 8-8 12-16 12s-14-4-16-12z" fill="#F2A541" ${K}/>`,
+crush:`<rect x="26" y="10" width="48" height="16" rx="4" fill="#8E9AAF" ${K}/><path d="M50 26v14" ${NF}/><rect x="34" y="40" width="32" height="12" rx="3" fill="#8E9AAF" ${K}/><path d="M20 88l6-18 12 4-4 14zM44 88l4-12 12 2 2 10zM68 88l2-14 12 2 0 12z" fill="#C9A27A" ${K}/><path d="M50 58v6M40 60l-3 5M60 60l3 5" ${NF}/>`,
+add:`<path d="M20 30l26-14 10 18-26 14z" fill="#9FC4E8" ${K}/><path d="M48 36c4 8 4 14 2 20" stroke="#2F6FDB" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M16 58h68v22a8 8 0 0 1-8 8H24a8 8 0 0 1-8-8z" fill="#E8E2DA" ${K}/><circle cx="78" cy="24" r="12" fill="#3FA34D" ${K}/><path d="M78 18v12M72 24h12" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>`,
+feed:`<rect x="8" y="58" width="46" height="10" rx="5" fill="#8E9AAF" ${K}/><rect x="16" y="46" width="14" height="10" fill="#F4A38E" ${K}/><rect x="34" y="46" width="14" height="10" fill="#F4A38E" ${K}/><rect x="54" y="30" width="38" height="50" rx="6" fill="#DDE3EA" ${K}/><path d="M40 30h14M48 24l8 6-8 6" ${NF}/><circle cx="73" cy="55" r="9" fill="#F6C343" ${K}/>`,
+transfer:`<rect x="8" y="40" width="30" height="40" rx="5" fill="#9FC4E8" ${K}/><rect x="62" y="40" width="30" height="40" rx="5" fill="#9FC4E8" ${K}/><path d="M38 52h24" stroke="#8E9AAF" stroke-width="9"/><path d="M38 52h24" ${NF}/><path d="M42 30h18M54 24l8 6-8 6" ${NF}/>`,
+filter:`<path d="M16 20h68L58 54v22l-16 10V54z" fill="#DDE3EA" ${K}/><path d="M24 28h52" ${NF}/><path d="M50 90c-4 0-6-3-6-6 0-4 6-10 6-10s6 6 6 10c0 3-2 6-6 6z" fill="#2F6FDB" ${K}/>`,
+remove:`<rect x="10" y="40" width="58" height="44" rx="6" fill="#9FC4E8" ${K}/><g fill="#1F2A44"><circle cx="26" cy="56" r="4"/><circle cx="42" cy="66" r="4"/><circle cx="54" cy="54" r="3"/></g><path d="M60 50h26M78 42l8 8-8 8" ${NF}/><circle cx="80" cy="22" r="12" fill="#D64545" ${K}/><path d="M74 22h12" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>`,
+heat:`<path d="M50 10c4 16 22 22 22 46a22 22 0 0 1-44 0c0-12 8-16 10-26 4 6 6 10 6 16 4-8 6-20 6-36z" fill="#E8735A" ${K}/><path d="M50 58c2 6 10 8 10 16a10 10 0 0 1-20 0c0-6 6-8 10-16z" fill="#F6C343" ${K}/>`,
+dry:`<rect x="10" y="22" width="60" height="62" rx="6" fill="#DDE3EA" ${K}/><g fill="#C9553C" ${K}><rect x="20" y="58" width="18" height="10" rx="2"/><rect x="42" y="58" width="18" height="10" rx="2"/></g><path d="M24 48c3-4 0-8 3-12M38 48c3-4 0-8 3-12M52 48c3-4 0-8 3-12" ${NF}/><circle cx="78" cy="26" r="14" fill="#fff" ${K}/><path d="M78 18v8l6 4" ${NF}/>`,
+press:`<path d="M8 50h84" stroke="#F4EBDD" stroke-width="8"/><path d="M8 46h84M8 54h84" ${NF}/><circle cx="36" cy="30" r="16" fill="#F6C343" ${K}/><circle cx="36" cy="30" r="5" fill="#1F2A44"/><circle cx="64" cy="70" r="16" fill="#F6C343" ${K}/><circle cx="64" cy="70" r="5" fill="#1F2A44"/>`,
+package:`<path d="M12 36l26-12 26 12v34L38 82 12 70z" fill="#E3A15A" ${K}/><path d="M12 36l26 12 26-12M38 48v34" ${NF}/><rect x="60" y="58" width="22" height="18" rx="2" fill="#2F6FDB" ${K}/><path d="M82 64h8l4 6v6H82z" fill="#2F6FDB" ${K}/><circle cx="68" cy="80" r="5" fill="#fff" ${K}/><circle cx="88" cy="80" r="5" fill="#fff" ${K}/>`,
+bottle:`<path d="M42 8h16v14c0 6 12 10 12 24v40a6 6 0 0 1-6 6H36a6 6 0 0 1-6-6V46c0-14 12-18 12-24z" fill="#7CC59A" ${K}/><path d="M36 52h28v22H36z" fill="#fff" ${K}/><path d="M42 8h16" ${NF}/>`,
+frog:`<g fill="#CFE8D3" ${K}><circle cx="30" cy="34" r="12"/><circle cx="52" cy="26" r="12"/><circle cx="44" cy="50" r="12"/></g><g fill="#1F2A44"><circle cx="30" cy="34" r="4"/><circle cx="52" cy="26" r="4"/><circle cx="44" cy="50" r="4"/></g><path d="M62 74c6-8 18-8 22 0s-6 12-14 8c-4 4-10 10-20 12 6-6 10-12 12-20z" fill="#3FA34D" ${K}/><circle cx="78" cy="72" r="2.5" fill="#1F2A44"/>`,
+factory:`<path d="M8 88V46l20 12V46l20 12V46l20 12V24h16v64z" fill="#F4A38E" ${K}/><rect x="70" y="10" width="12" height="14" fill="#8E9AAF" ${K}/><g fill="#fff" ${K}><rect x="16" y="66" width="10" height="10"/><rect x="36" y="66" width="10" height="10"/><rect x="56" y="66" width="10" height="10"/></g><path d="M74 8c0-4 6-6 10-4" ${NF}/>`,
+cards:`<rect x="14" y="22" width="40" height="56" rx="6" fill="#E8735A" ${K} transform="rotate(-10 34 50)"/><rect x="46" y="22" width="40" height="56" rx="6" fill="#fff" ${K} transform="rotate(8 66 50)"/><text x="66" y="58" text-anchor="middle" font-size="22" font-weight="800" fill="#1F2A44" transform="rotate(8 66 50)">?</text>`,
+hand:`<path d="M36 90V40a6 6 0 0 1 12 0V20a6 6 0 0 1 12 0v22-16a6 6 0 0 1 12 0v20-10a6 6 0 0 1 12 0v32c0 14-10 22-24 22H52c-8 0-12-4-16-10L22 62a6 6 0 0 1 9-8l5 6" fill="#F4C7A1" ${K}/>`,
+coins:`<g ${K}><ellipse cx="40" cy="74" rx="24" ry="8" fill="#F6C343"/><path d="M16 64v10M64 64v10" ${NF}/><ellipse cx="40" cy="64" rx="24" ry="8" fill="#F6C343"/><ellipse cx="40" cy="52" rx="24" ry="8" fill="#F6C343"/><ellipse cx="66" cy="36" rx="18" ry="18" fill="#F2A541"/></g><text x="66" y="43" text-anchor="middle" font-size="20" font-weight="800" fill="#1F2A44">+</text>`,
+bricks:`<g fill="#C9553C" ${K}><rect x="10" y="62" width="38" height="20" rx="2"/><rect x="52" y="62" width="38" height="20" rx="2"/><rect x="30" y="40" width="38" height="20" rx="2"/><rect x="10" y="18" width="38" height="20" rx="2"/><rect x="52" y="18" width="38" height="20" rx="2"/></g>`,
+yes:`<circle cx="50" cy="50" r="40" fill="#3FA34D"/><path d="M30 52l14 14 26-30" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>`,
+no:`<circle cx="50" cy="50" r="40" fill="#D64545"/><path d="M34 34l32 32M66 34L34 66" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/>`,
+gift:`<rect x="14" y="40" width="72" height="50" rx="6" fill="#E8735A" ${K}/><rect x="8" y="28" width="84" height="16" rx="4" fill="#F4A38E" ${K}/><rect x="44" y="28" width="12" height="62" fill="#F6C343" ${K}/><path d="M50 28c-10-18-30-16-26-4 2 6 16 4 26 4zM50 28c10-18 30-16 26-4-2 6-16 4-26 4z" fill="#F6C343" ${K}/>`
+};
+function svgIcon(n){return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${ICON[n]||''}</svg>`}
+
+// ---------- TEAM AVATARS ----------
+const AVATARS=[
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#FDE3D6"/><path d="M50 14c14 10 18 30 14 48H36c-4-18 0-38 14-48z" fill="#fff" ${K}/><circle cx="50" cy="38" r="7" fill="#2F6FDB" ${K}/><path d="M36 52l-10 16 12-2M64 52l10 16-12-2" fill="#E8735A" ${K}/><path d="M44 66c0 8 6 14 6 18 0-4 6-10 6-18" fill="#F6C343" ${K}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#E3EEFF"/><path d="M56 12L28 56h20l-6 32 30-46H52z" fill="#F6C343" ${K}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#FFF3D1"/><path d="M50 16l10 22 24 2-18 16 6 24-22-13-22 13 6-24-18-16 24-2z" fill="#F2A541" ${K}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#E1F4EF"/><path d="M50 84V46" ${NF}/><path d="M50 50C30 50 20 36 22 20c18 0 28 12 28 30zM50 60c16 0 26-10 26-26-16 0-26 10-26 26z" fill="#3FA34D" ${K}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#F1E8FF"/><path d="M20 70l-4-40 18 16 16-24 16 24 18-16-4 40z" fill="#F6C343" ${K}/><rect x="20" y="70" width="60" height="10" rx="3" fill="#E8735A" ${K}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#FFE4E0"/><path d="M50 14c6 18 26 24 26 46a26 26 0 0 1-52 0c0-14 10-18 12-30 6 6 8 12 8 18 4-10 6-20 6-34z" fill="#E8735A" ${K}/><path d="M50 60c3 6 12 8 12 18a12 12 0 0 1-24 0c0-6 8-10 12-18z" fill="#F6C343" ${K}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#E3EEFF"/><circle cx="50" cy="54" r="26" fill="#8E9AAF" ${K}/><circle cx="40" cy="48" r="8" fill="#fff" ${K}/><circle cx="60" cy="48" r="8" fill="#fff" ${K}/><circle cx="40" cy="48" r="3" fill="#1F2A44"/><circle cx="60" cy="48" r="3" fill="#1F2A44"/><path d="M46 60l4 5 4-5z" fill="#F2A541" ${K}/><path d="M28 34l6 10M72 34l-6 10" ${NF}/></svg>`,
+`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#FFF3D1"/><circle cx="50" cy="50" r="18" fill="#F6C343" ${K}/><path d="M50 18v10M50 72v10M18 50h10M72 50h10M27 27l7 7M66 66l7 7M27 73l7-7M66 34l7-7" ${NF}/></svg>`
+];
+
+// ---------- DIAGRAM: RECYCLING PAPER ----------
+function tagSVG(x,y,w,h,txt,fs=17){const lines=txt.split('|');const cy=y+h/2-(lines.length-1)*fs*0.55;
+ return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="#F07F22"/>`+lines.map((l,i)=>`<text x="${x+w/2}" y="${cy+i*fs*1.1+fs*0.36}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="#fff">${l}</text>`).join('')}
+function arrowsSVG(pts,dir){return pts.map(([x,y])=>dir==='r'?`<path d="M${x} ${y-6}l7 6-7 6" stroke="#3FA34D" stroke-width="3" fill="none" stroke-linecap="round"/>`:dir==='l'?`<path d="M${x} ${y-6}l-7 6 7 6" stroke="#3FA34D" stroke-width="3" fill="none" stroke-linecap="round"/>`:`<path d="M${x-6} ${y}l6 7 6-7" stroke="#3FA34D" stroke-width="3" fill="none" stroke-linecap="round"/>`).join('')}
+function bubbles(x0,y0,w,h,n,seed){let s=seed,out='';const r=()=>{s=(s*9301+49297)%233280;return s/233280};for(let i=0;i<n;i++){out+=`<circle cx="${x0+r()*w}" cy="${y0+r()*h}" r="${6+r()*9}" fill="#fff" stroke="#BFD9F0" stroke-width="1.5"/>`}return out}
+function paperSVG(){return `<svg class="dg" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" font-family="Be Vietnam Pro,Segoe UI,sans-serif">
+<rect x="0" y="0" width="760" height="165" fill="#FFF4CC"/><rect x="0" y="165" width="760" height="105" fill="#E6F4D7"/><rect x="0" y="270" width="760" height="130" fill="#FFF4CC"/><rect x="0" y="400" width="760" height="200" fill="#E6F4D7"/>
+<g font-size="20" font-weight="800" fill="#1F2A44" text-anchor="middle"><rect x="772" y="6" width="122" height="153" rx="12" fill="#FFEAA0"/><text x="833" y="76">Making</text><text x="833" y="100">pulp</text>
+<rect x="772" y="171" width="122" height="93" rx="12" fill="#CFEAB4"/><text x="833" y="224">Filtering</text>
+<rect x="772" y="276" width="122" height="118" rx="12" fill="#FFEAA0"/><text x="833" y="342">Cleaning</text>
+<rect x="772" y="406" width="122" height="188" rx="12" fill="#CFEAB4"/><text x="833" y="494">Recycled</text><text x="833" y="518">paper</text></g>
+<g class="stg" data-s="1">${tagSVG(14,12,120,40,'Used paper')}<path d="M40 52v54h22" stroke="#1F2A44" stroke-width="2.5" fill="none"/>
+<rect x="62" y="96" width="300" height="24" rx="12" fill="#8E9AAF" stroke="#1F2A44" stroke-width="3"/>${[80,120,160,200,240,280,320,345].map(x=>`<circle cx="${x}" cy="108" r="6" fill="#DDE3EA" stroke="#1F2A44" stroke-width="2"/>`).join('')}
+<path d="M362 96l58 40v24l-58-40z" fill="#8E9AAF" stroke="#1F2A44" stroke-width="3"/>
+${[[85,72],[170,70],[255,72]].map(([x,y])=>`<g transform="rotate(-6 ${x+30} ${y+12})"><rect x="${x}" y="${y}" width="62" height="22" fill="#F9D1C3" stroke="#C9553C" stroke-width="2"/><path d="M${x+8} ${y+8}h40M${x+8} ${y+14}h30" stroke="#C9553C" stroke-width="1.5"/></g>`).join('')}
+${arrowsSVG([[150,50],[200,50],[250,50],[300,50]],'r')}</g>
+<g class="stg" data-s="2"><rect x="425" y="70" width="230" height="88" rx="6" fill="#4BA3E3" stroke="#1F2A44" stroke-width="3"/><rect x="425" y="70" width="230" height="14" fill="#8CC8F0"/>
+${[[440,96,-10],[480,118,12],[525,95,-4],[570,120,8],[610,98,-14],[455,130,6],[595,136,-8]].map(([x,y,r])=>`<rect x="${x}" y="${y}" width="30" height="20" fill="#fff" stroke="#F4A38E" stroke-width="2" transform="rotate(${r} ${x+15} ${y+10})"/>`).join('')}
+${tagSVG(560,8,170,50,'Water and|chemicals',16)}<path d="M730 33h12v80h-87" stroke="#1F2A44" stroke-width="2.5" fill="none"/><path d="M662 107l-8 6 8 6" stroke="#1F2A44" stroke-width="2.5" fill="none"/></g>
+<g class="stg" data-s="3"><path d="M425 145H340v38" stroke="#C8D0DB" stroke-width="16" fill="none"/><path d="M425 145H340v38" stroke="#1F2A44" stroke-width="2" fill="none" opacity=".4"/>
+<circle cx="388" cy="145" r="15" fill="#E8735A" stroke="#1F2A44" stroke-width="3"/><path d="M378 145h20M388 135v20" stroke="#fff" stroke-width="3"/>
+<path d="M262 183h160l-18 34H280z" fill="#DDE3EA" stroke="#1F2A44" stroke-width="3"/><rect x="300" y="217" width="84" height="48" fill="#4BA3E3" stroke="#1F2A44" stroke-width="3"/>
+${tagSVG(24,180,130,50,'Filtered|pulp',16)}<path d="M154 205h100" stroke="#1F2A44" stroke-width="2.5"/>${arrowsSVG([[342,236]],'d')}${arrowsSVG([[470,175],[440,175]],'l')}</g>
+<g class="stg" data-s="4"><rect x="228" y="282" width="290" height="104" rx="6" fill="#4BA3E3" stroke="#1F2A44" stroke-width="3"/>${bubbles(240,284,268,96,34,7)}
+<g fill="#1F2A44"><ellipse cx="290" cy="330" rx="12" ry="8"/><ellipse cx="350" cy="316" rx="11" ry="7"/><ellipse cx="410" cy="338" rx="12" ry="8"/><ellipse cx="460" cy="320" rx="10" ry="7"/></g>
+<rect x="140" y="322" width="80" height="54" rx="6" fill="#DDE3EA" stroke="#1F2A44" stroke-width="3"/><circle cx="162" cy="349" r="9" fill="#fff" stroke="#1F2A44" stroke-width="2"/><path d="M220 349h10" stroke="#1F2A44" stroke-width="5"/>
+${tagSVG(14,330,116,40,'Air pump',16)}${tagSVG(24,276,80,38,'Ink',16)}<path d="M228 296H112" stroke="#1F2A44" stroke-width="2.5"/>${arrowsSVG([[126,296]],'l')}
+${tagSVG(560,282,160,50,'Water and|soap',16)}<path d="M560 307h-70" stroke="#1F2A44" stroke-width="2.5"/>
+<path d="M518 340h130v62" stroke="#C8D0DB" stroke-width="16" fill="none"/><circle cx="600" cy="340" r="14" fill="#E8735A" stroke="#1F2A44" stroke-width="3"/><path d="M591 340h18M600 331v18" stroke="#fff" stroke-width="3"/>${arrowsSVG([[548,322]],'r')}</g>
+<g class="stg" data-s="5"><rect x="262" y="420" width="420" height="108" rx="6" fill="#A7B1C2" stroke="#1F2A44" stroke-width="3"/><rect x="380" y="430" width="290" height="88" fill="#59657A" stroke="#1F2A44" stroke-width="2"/>
+${[440,525].map(x=>`<circle cx="${x}" cy="474" r="38" fill="#F6C343" stroke="#1F2A44" stroke-width="3"/><circle cx="${x}" cy="474" r="14" fill="#1F2A44"/>`).join('')}${bubbles(580,480,80,30,9,3)}
+${arrowsSVG([[640,410],[590,410],[540,410],[490,410],[440,410],[390,410],[340,410]],'l')}
+<rect x="468" y="528" width="34" height="62" fill="#2F6FDB" stroke="#1F2A44" stroke-width="2"/><text x="485" y="559" font-size="15" font-weight="800" fill="#fff" text-anchor="middle" transform="rotate(90 485 559)">WATER</text>${arrowsSVG([[520,560],[520,578]],'d')}
+${tagSVG(322,540,130,50,'Heated|rollers',16)}<path d="M412 540l22-30" stroke="#1F2A44" stroke-width="2"/>${tagSVG(600,540,140,40,'Clean pulp',16)}<path d="M640 540l-20-38" stroke="#1F2A44" stroke-width="2"/></g>
+<g class="stg" data-s="6"><rect x="40" y="500" width="222" height="16" rx="8" fill="#8E9AAF" stroke="#1F2A44" stroke-width="2.5"/>
+${[70,120,170,220].map(x=>`<rect x="${x-18}" y="456" width="36" height="44" rx="6" fill="#fff" stroke="#1F2A44" stroke-width="2.5"/><ellipse cx="${x}" cy="478" rx="7" ry="9" fill="#DDE3EA" stroke="#1F2A44" stroke-width="2"/>`).join('')}
+<rect x="40" y="530" width="180" height="48" rx="8" fill="#2E8B57"/><text x="130" y="561" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">RECYCLED PAPER</text></g>
+</svg>`}
+
+// ---------- DIAGRAM: MAKING BRICKS ----------
+function bricksSVG(){
+ const box=(x,y,n,cap,inner)=>`<rect x="${x}" y="${y}" width="225" height="230" rx="18" fill="#fff" stroke="#EADFD6" stroke-width="3"/>${n===''?'':`<circle cx="${x+24}" cy="${y+24}" r="17" fill="#E8735A"/><text x="${x+24}" y="${y+31}" text-anchor="middle" font-size="19" font-weight="800" fill="#fff">${n}</text>`}${inner}<text x="${x+112}" y="${y+215}" text-anchor="middle" font-size="18" font-weight="800" fill="#1F2A44">${cap}</text>`;
+ const S2='stroke="#1F2A44" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
+ const arrowR=(x,y)=>`<path d="M${x} ${y}h20" stroke="#3FA34D" stroke-width="5"/><path d="M${x+14} ${y-8}l9 8-9 8" fill="none" stroke="#3FA34D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+ const arrowL=(x,y)=>`<path d="M${x} ${y}h-20" stroke="#3FA34D" stroke-width="5"/><path d="M${x-14} ${y-8}l-9 8 9 8" fill="none" stroke="#3FA34D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+ const brick=(x,y,w=34,h=16)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#C9553C" ${S2}/>`;
+ return `<svg class="dg" viewBox="0 0 1000 580" xmlns="http://www.w3.org/2000/svg" font-family="Be Vietnam Pro,Segoe UI,sans-serif">
+<g class="stg" data-s="1">${box(15,30,1,'Digging clay',`
+ <path d="M30 190c30-40 70-46 110-30s50 30 85 30v0z" fill="#B5764A" ${S2}/><path d="M60 175c10-12 30-14 44-6" fill="none" stroke="#8A5232" stroke-width="3"/>
+ <rect x="120" y="120" width="70" height="34" rx="6" fill="#F2A541" ${S2}/><rect x="150" y="94" width="34" height="28" rx="4" fill="#F2A541" ${S2}/><rect x="156" y="99" width="22" height="16" fill="#CFE6F5" ${S2}/>
+ <rect x="118" y="154" width="76" height="14" rx="7" fill="#59657A" ${S2}/><path d="M128 128L92 84 60 116" fill="none" stroke="#F2A541" stroke-width="9" stroke-linecap="round"/><path d="M128 128L92 84 60 116" fill="none" ${S2}/>
+ <path d="M48 112l22-4 4 20-22 6z" fill="#8E9AAF" ${S2}/>`)}</g>
+${arrowR(243,145)}
+<g class="stg" data-s="2">${box(260,30,2,'Grid & roller',`
+ <rect x="290" y="62" width="110" height="46" fill="#DDE3EA" ${S2}/>${[305,320,335,350,365,380].map(x=>`<path d="M${x} 62v46" stroke="#1F2A44" stroke-width="1.8"/>`).join('')}<path d="M290 85h110" stroke="#1F2A44" stroke-width="1.8"/>
+ <rect x="300" y="128" width="90" height="34" rx="17" fill="#A7B1C2" ${S2}/><path d="M318 128v34M372 128v34" stroke="#1F2A44" stroke-width="1.6"/><path d="M296 172h98" stroke="#B5764A" stroke-width="10" stroke-linecap="round"/>
+ <path d="M420 70c0 10 6 14 6 20a6 6 0 0 1-12 0c0-6 6-10 6-20z" fill="#2F6FDB" ${S2}/><text x="420" y="116" text-anchor="middle" font-size="14" font-weight="700" fill="#2F6FDB">water</text>
+ <path d="M410 134c4-6 16-6 20 0l2 22h-24z" fill="#E9D7A8" ${S2}/><text x="420" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#8A6A2A">sand</text>`)}</g>
+${arrowR(488,145)}
+<g class="stg" data-s="3">${box(505,30,3,'Shaping',`
+ <path d="M520 100h70v46h-70z" fill="#E3A15A" ${S2}/><rect x="530" y="108" width="50" height="28" rx="3" fill="#C9553C" ${S2}/><text x="555" y="166" text-anchor="middle" font-size="14" font-weight="700" fill="#5B6478">mould</text>
+ <text x="612" y="128" text-anchor="middle" font-size="17" font-weight="800" fill="#E8735A">or</text>
+ <rect x="640" y="122" width="70" height="26" fill="#B5764A" ${S2}/><path d="M634 74h82v40h-82z" fill="none" stroke="#59657A" stroke-width="4"/>${[652,666,680,694].map(x=>`<path d="M${x} 74v74" stroke="#59657A" stroke-width="1.6"/>`).join('')}<text x="675" y="170" text-anchor="middle" font-size="14" font-weight="700" fill="#5B6478">wire cutter</text>`)}</g>
+${arrowR(733,145)}
+<g class="stg" data-s="4">${box(750,30,4,'Drying oven',`
+ <rect x="780" y="64" width="120" height="104" rx="8" fill="#DDE3EA" ${S2}/>${brick(795,138)}${brick(835,138)}${brick(815,120)}
+ <path d="M800 108c4-6 0-10 4-16M830 108c4-6 0-10 4-16M860 108c4-6 0-10 4-16" fill="none" stroke="#E8735A" stroke-width="3" stroke-linecap="round"/>
+ <circle cx="930" cy="84" r="20" fill="#fff" ${S2}/><path d="M930 72v12l8 6" fill="none" ${S2}/><text x="930" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#1F2A44">24–48</text><text x="930" y="150" text-anchor="middle" font-size="14" font-weight="700" fill="#5B6478">hours</text>`)}</g>
+<path d="M862 262v40" stroke="#3FA34D" stroke-width="5"/><path d="M854 296l8 9 8-9" fill="none" stroke="#3FA34D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="stg" data-s="5">${box(750,320,5,'Kiln',`
+ <path d="M776 470V400a54 54 0 0 1 108 0v70z" fill="#A7B1C2" ${S2}/><path d="M796 470v-56a34 34 0 0 1 68 0v56z" fill="#59657A" ${S2}/>
+ <path d="M816 470c0-14 14-18 14-34 10 10 14 22 14 34" fill="#E8735A" ${S2}/>${brick(812,446,36,14)}
+ <rect x="912" y="372" width="18" height="96" rx="9" fill="#fff" ${S2}/><rect x="916" y="392" width="10" height="72" rx="5" fill="#D64545"/>
+ <text x="900" y="365" text-anchor="end" font-size="14" font-weight="800" fill="#D64545">1,300°C</text><text x="904" y="490" text-anchor="end" font-size="14" font-weight="800" fill="#F07F22">200°C</text>`)}</g>
+${arrowL(745,435)}
+<g class="stg" data-s="6">${box(505,320,6,'Cooling chamber',`
+ <rect x="528" y="352" width="120" height="110" rx="8" fill="#CFE6F5" ${S2}/>${brick(540,428)}${brick(580,428)}${brick(560,410)}
+ <circle cx="588" cy="384" r="16" fill="#fff" ${S2}/><path d="M588 384l0-12M588 384l10 7M588 384l-10 7" ${S2} fill="none"/>
+ <circle cx="682" cy="382" r="20" fill="#fff" ${S2}/><path d="M682 370v12l8 6" fill="none" ${S2}/><text x="682" y="428" text-anchor="middle" font-size="15" font-weight="800" fill="#1F2A44">48–72</text><text x="682" y="446" text-anchor="middle" font-size="14" font-weight="700" fill="#5B6478">hours</text>`)}</g>
+${arrowL(500,435)}
+<g class="stg" data-s="7">${box(260,320,7,'Packaging',`
+ <rect x="296" y="462" width="150" height="12" fill="#C9A27A" ${S2}/>${[0,1,2].map(r=>[0,1,2,3].map(c=>brick(302+c*36,446-r*18,34,16)).join('')).join('')}
+ <path d="M296 392h150v70H296z" fill="#CFE6F5" opacity=".45" stroke="#2F6FDB" stroke-width="2" stroke-dasharray="6 4"/>`)}
+ ${arrowL(255,435)}
+ ${box(15,320,'',"Delivery",`
+ <rect x="36" y="402" width="110" height="58" rx="4" fill="#2F6FDB" ${S2}/><path d="M146 418h34l20 22v20h-54z" fill="#2F6FDB" ${S2}/><rect x="154" y="424" width="22" height="16" fill="#CFE6F5" ${S2}/>
+ ${brick(48,384)}${brick(86,384)}<circle cx="66" cy="466" r="12" fill="#fff" ${S2}/><circle cx="176" cy="466" r="12" fill="#fff" ${S2}/>`)}</g>
+</svg>`}
+const DIAGRAMS={paper:paperSVG,bricks:bricksSVG};
+// ================= HELPERS =================
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+
+// ================= SOUND (no sound on slide changes) =================
+let AC=null,SOUND=true;
+function ac(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}
+function tone(f,t0,dur,type='sine',vol=.25,f2){const a=ac(),t=a.currentTime+t0,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.05)}
+function noise(t0,dur,vol=.2,freq=2000){const a=ac(),n=Math.floor(a.sampleRate*dur),b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);const s=a.createBufferSource();s.buffer=b;const f=a.createBiquadFilter();f.type='bandpass';f.frequency.value=freq;const g=a.createGain();g.gain.value=vol;s.connect(f).connect(g).connect(a.destination);s.start(a.currentTime+t0)}
+const SFX={
+ tick(){tone(1100,0,.04,'sine',.05)},
+ ting(){tone(1568,0,.6,'sine',.28);tone(3136,0,.35,'sine',.07)},
+ ting2(){tone(1568,0,.45,'sine',.26);tone(2093,.14,.75,'sine',.28);tone(4186,.14,.4,'sine',.06)},
+ cash(){noise(0,.07,.4,2600);noise(.08,.05,.3,4200);[2637,3136,3520,4186].forEach((f,i)=>tone(f,.13+i*.055,.4,'triangle',.14))},
+ pop(){tone(520,0,.11,'sine',.32,1500)},
+ flip(){noise(0,.09,.18,1800)},
+ win(){[523,659,784,1047].forEach((f,i)=>tone(f,i*.11,.22,'square',.09));[1047,1319,1568].forEach(f=>tone(f,.48,.9,'triangle',.09))},
+ wrong(){[392,370,349].forEach((f,i)=>tone(f,i*.26,.26,'sawtooth',.09));tone(330,.78,.7,'sawtooth',.09,300)},
+ bonk(){tone(220,0,.18,'square',.12,140)},
+ fart(){const a=ac(),t=a.currentTime,o=a.createOscillator(),l=a.createOscillator(),lg=a.createGain(),g=a.createGain(),f=a.createBiquadFilter();o.type='sawtooth';o.frequency.setValueAtTime(95,t);o.frequency.linearRampToValueAtTime(70,t+.7);l.frequency.value=26;lg.gain.value=28;l.connect(lg).connect(o.frequency);f.type='lowpass';f.frequency.value=420;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.75);o.connect(f).connect(g).connect(a.destination);o.start(t);l.start(t);o.stop(t+.8);l.stop(t+.8)},
+ drum(){for(let i=0;i<14;i++)tone(180+Math.random()*40,i*.08,.06,'triangle',.12)}
+};
+function play(n){if(!SOUND)return;try{SFX[n]()}catch(e){}}
+
+// ================= TEAMS =================
+const COLORS=['#E8735A','#2F6FDB','#2A9D8F','#9B5DE5'];
+let T={n:3,teams:[0,1,2,3].map(i=>({name:'Team '+(i+1),av:i,members:[],score:0,bag:[]})),pool:[],last:null,callIdx:-1,uploads:[]};
+function save(){try{localStorage.setItem('mmp_teams_v1',JSON.stringify(T))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem('mmp_teams_v1')||'null');if(s&&s.teams)T=Object.assign(T,s)}catch(e){}}
+function shortName(full){const w=full.trim().split(/\s+/);return w.length>=2?w.slice(1).join(' '):full.trim()}
+function avHTML(t){const a=t.av;if(typeof a==='string'&&a.startsWith('up:')){const u=T.uploads[+a.slice(3)];if(u)return `<img src="${u}" alt="">`}return AVATARS[(+a||0)%AVATARS.length]}
+function active(){return T.teams.slice(0,T.n)}
+function renderScore(){$('#score').innerHTML=active().map((t,i)=>`<div class="tm ${T.last===i?'hot':''}" style="border-color:${COLORS[i]}" data-i="${i}"><span style="color:${COLORS[i]}">${esc(t.name)}</span><b>${t.score}</b></div>`).join('');
+ $$('#score .tm').forEach(el=>el.onclick=()=>adjust(+el.dataset.i))}
+function adjust(i){const t=T.teams[i];modal(`<div class="callteam" style="background:${COLORS[i]}"><span class="av">${avHTML(t)}</span>${esc(t.name)}</div><div class="gres">${t.score}</div><div class="row">${[-10,-5,5,10,20].map(v=>`<button class="btn ${v<0?'ghost':'teal'}" data-v="${v}">${v>0?'+':''}${v}</button>`).join('')}</div><div class="row" style="margin-top:1em"><button class="btn ghost sm" data-close>Close</button></div>`);
+ $$('#mbox [data-v]').forEach(b=>b.onclick=()=>{const v=+b.dataset.v;addScore(i,v);play(v>0?'pop':'bonk');$('#mbox .gres').textContent=t.score})}
+function addScore(i,v){T.teams[i].score=Math.max(0,T.teams[i].score+v);save();renderScore();const el=$(`#score .tm[data-i="${i}"]`);if(el&&v){const r=el.getBoundingClientRect(),f=document.createElement('div');f.className='fly';f.style.left=r.left+r.width/2-20+'px';f.style.top=r.top-30+'px';f.style.color=v>0?COLORS[i]:'#D64545';f.textContent=(v>0?'+':'')+v;document.body.appendChild(f);setTimeout(()=>f.remove(),1300)}}
+
+// modal
+function modal(html){$('#mbox').innerHTML=html;$('#ov').classList.add('on');$$('#mbox [data-close]').forEach(b=>b.onclick=closeModal)}
+function closeModal(){$('#ov').classList.remove('on')}
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov'&&!$('#mbox').dataset.lock)closeModal()});
+
+// ----- random caller: team by team, random student inside the team -----
+function callStudent(){const ts=active();if(!ts.some(t=>t.members.length)){toast('Add students to the teams first (Teams button).');return}
+ let i=T.callIdx;for(let k=0;k<T.n;k++){i=(i+1)%T.n;if(T.teams[i].members.length)break}
+ T.callIdx=i;const t=T.teams[i];t.bag=(t.bag||[]).filter(n=>t.members.includes(n));if(!t.bag.length)t.bag=shuffle(t.members);const pick=t.bag.pop();T.last=i;save();renderScore();
+ modal(`<div class="muted" style="font-weight:700">Next student</div><div class="callname" id="cn">…</div><div class="callteam" style="background:${COLORS[i]}"><span class="av">${avHTML(t)}</span>${esc(t.name)}</div><div class="row" style="margin-top:1.2em"><button class="btn ghost sm" data-close>OK</button></div>`);
+ play('drum');const pool=t.members.length>1?t.members:[pick];let k=0;const iv=setInterval(()=>{$('#cn').textContent=shortName(pool[k++%pool.length])},80);
+ setTimeout(()=>{clearInterval(iv);$('#cn').textContent=shortName(pick);play('ting')},1150)}
+
+// ----- awarding (+ surprise gift at random) -----
+const GIFT_CHANCE=.3;
+function awardBar(pts,label){return `<div class="award" data-pts="${pts}"><span class="lb">${label||'Correct? Give'} +${pts} to</span>${active().map((t,i)=>`<button class="aw ${T.last===i?'called':''}" style="background:${COLORS[i]}" data-ti="${i}">${esc(t.name)}</button>`).join('')}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('.aw');if(!b||b.disabled)return;const bar=b.closest('.award');award(+bar.dataset.pts,+b.dataset.ti);$$('.aw',bar).forEach(x=>x.disabled=true)});
+function award(pts,ti){addScore(ti,pts);play('cash');if(T.n>0&&Math.random()<GIFT_CHANCE)setTimeout(()=>gift(ti),1000)}
+function gift(ti){const t=T.teams[ti];const pool=[{k:'p',v:20},{k:'p',v:30},{k:'p',v:50},{k:'zero'}];if(T.n>1)pool.push({k:'steal'},{k:'steal'});const three=shuffle(pool).slice(0,3);
+ $('#mbox').dataset.lock='1';
+ modal(`<div class="callteam" style="background:${COLORS[ti]}"><span class="av">${avHTML(t)}</span>${esc(t.name)}</div><div class="gres" style="font-size:2em">Surprise gift!</div><div class="muted">Pick one box</div><div class="gifts">${three.map((g,k)=>`<div class="gift" data-k="${k}">${svgIcon('gift')}</div>`).join('')}</div><div id="gout"></div>`);
+ play('ting2');
+ $$('#mbox .gift').forEach(el=>el.onclick=()=>{if($('#mbox').dataset.done)return;$('#mbox').dataset.done='1';const g=three[+el.dataset.k];$$('#mbox .gift').forEach(x=>x.style.opacity=x===el?1:.25);
+  const out=$('#gout');
+  if(g.k==='p'){out.innerHTML=`<div class="gres" style="color:${COLORS[ti]}">+${g.v} points</div>`;addScore(ti,g.v);play(g.v>=50?'win':'cash');endGift()}
+  else if(g.k==='zero'){out.innerHTML=`<div class="gres" style="color:#D64545">Oh no! Empty box</div>`;play('fart');endGift()}
+  else{play('ting2');out.innerHTML=`<div class="gres">STEAL!</div><div class="muted">Choose a team to steal from</div><div class="row" style="margin-top:.6em">${active().map((x,i)=>i===ti?'':`<button class="btn" style="background:${COLORS[i]}" data-v="${i}">${esc(x.name)} (${x.score})</button>`).join('')}</div>`;
+   $$('#gout [data-v]').forEach(b=>b.onclick=()=>{const vi=+b.dataset.v,v=T.teams[vi];const modes=[{n:'ALL',f:s=>s},{n:'HALF',f:s=>Math.floor(s/2)},{n:'20 points',f:s=>Math.min(20,s)}];const m=modes[Math.floor(Math.random()*3)];const amt=m.f(v.score);
+    addScore(vi,-amt);addScore(ti,amt);out.innerHTML=`<div class="gres" style="color:${COLORS[ti]}">Steal ${m.n}: ${amt} points!</div><div class="muted">from ${esc(v.name)}</div>`;play(amt>0?'cash':'fart');endGift()})}
+ })}
+function endGift(){const m=$('#mbox');delete m.dataset.lock;delete m.dataset.done;const d=document.createElement('div');d.className='row';d.style.marginTop='1em';d.innerHTML='<button class="btn ghost sm" data-close>Close</button>';$('#gout').appendChild(d);d.querySelector('button').onclick=closeModal}
+
+// ================= TEAM SETUP SLIDE =================
+function initSetup(){
+ const tc=$('#tcount');tc.innerHTML=[1,2,3,4].map(n=>`<button data-n="${n}">${n}</button>`).join('');
+ $$('button',tc).forEach(b=>b.onclick=()=>{const n=+b.dataset.n;for(let i=n;i<4;i++){T.pool.push(...T.teams[i].members);T.teams[i].members=[]}T.n=n;if(T.last!=null&&T.last>=n)T.last=null;save();drawSetup();renderScore();play('tick')});
+ $('#addNames').onclick=()=>{const lines=$('#names').value.split(/\n/).map(l=>l.replace(/^\s*\d+[\.\)\-:]?\s*/,'').split('\t').filter(Boolean).sort((a,b)=>b.length-a.length)[0]||'').map(s=>s.trim()).filter(s=>s&&/\p{L}/u.test(s));
+  const all=new Set([...T.pool,...T.teams.flatMap(t=>t.members)]);lines.forEach(n=>{if(!all.has(n)){T.pool.push(n);all.add(n)}});$('#names').value='';save();drawSetup();play('pop')};
+ $('#clearNames').onclick=()=>{if(!confirmBox())return};
+ $('#autoTeams').onclick=()=>{const all=shuffle([...T.pool,...active().flatMap(t=>t.members)]);T.pool=[];active().forEach(t=>{t.members=[];t.bag=[]});all.forEach((n,k)=>T.teams[k%T.n].members.push(n));save();drawSetup();play('ting')};
+ $('#resetScores').onclick=()=>{T.teams.forEach(t=>t.score=0);T.last=null;T.callIdx=-1;save();renderScore();play('bonk')};
+ drawSetup()}
+function confirmBox(){modal(`<div class="gres" style="font-size:1.6em">Remove all names?</div><div class="row" style="margin-top:1em"><button class="btn coral" id="yesClear">Yes, clear</button><button class="btn ghost" data-close>Cancel</button></div>`);$('#yesClear').onclick=()=>{T.pool=[];T.teams.forEach(t=>{t.members=[];t.bag=[]});T.last=null;save();drawSetup();renderScore();closeModal()};return false}
+function drawSetup(){
+ $$('#tcount button').forEach(b=>b.classList.toggle('on',+b.dataset.n===T.n));
+ const box=$('#teamsBox');box.style.gridTemplateColumns=`repeat(${T.n},1fr)`;
+ box.innerHTML=active().map((t,i)=>`<div class="tcol"><div class="th" style="background:${COLORS[i]}"><span class="av" data-av="${i}">${avHTML(t)}</span><input value="${esc(t.name)}" data-nm="${i}"><b style="font-size:.7em">${t.members.length}</b></div><div class="zone" data-t="${i}">${t.members.map(n=>chip(n)).join('')}</div></div>`).join('');
+ $('#pool').innerHTML=T.pool.map(n=>chip(n)).join('');
+ $$('[data-nm]').forEach(inp=>inp.oninput=()=>{T.teams[+inp.dataset.nm].name=inp.value||('Team '+(+inp.dataset.nm+1));save();renderScore()});
+ $$('[data-av]').forEach(a=>a.onclick=()=>pickAvatar(+a.dataset.av));
+ $$('.nm').forEach(c=>{c.ondragstart=e=>{e.dataTransfer.setData('text/plain',c.dataset.n)};c.onclick=()=>{const from=+c.parentElement.dataset.t;moveName(c.dataset.n,from,(from+1)>=T.n?-1:from+1)}});
+ $$('.zone').forEach(z=>{z.ondragover=e=>{e.preventDefault();z.classList.add('over')};z.ondragleave=()=>z.classList.remove('over');z.ondrop=e=>{e.preventDefault();z.classList.remove('over');const n=e.dataTransfer.getData('text/plain');moveName(n,null,+z.dataset.t)}})}
+function chip(n){return `<span class="nm" draggable="true" data-n="${esc(n)}" title="${esc(n)}">${esc(shortName(n))}</span>`}
+function moveName(n,_from,to){T.pool=T.pool.filter(x=>x!==n);T.teams.forEach(t=>{t.members=t.members.filter(x=>x!==n);t.bag=(t.bag||[]).filter(x=>x!==n)});if(to===-1)T.pool.push(n);else T.teams[to].members.push(n);save();drawSetup();play('tick')}
+function pickAvatar(i){const ups=T.uploads.map((u,k)=>`<span class="av" data-pick="up:${k}"><img src="${u}" alt=""></span>`).join('');
+ modal(`<div class="gres" style="font-size:1.5em">Choose a picture for ${esc(T.teams[i].name)}</div><div class="avgrid">${AVATARS.map((a,k)=>`<span class="av" data-pick="${k}">${a}</span>`).join('')}${ups}</div><div class="row"><button class="btn teal sm" id="upBtn">Upload images…</button><button class="btn ghost sm" data-close>Close</button></div>`);
+ $$('#mbox [data-pick]').forEach(el=>el.onclick=()=>{const p=el.dataset.pick;T.teams[i].av=/^\d+$/.test(p)?+p:p;save();drawSetup();closeModal();play('pop')});
+ $('#upBtn').onclick=()=>{const inp=$('#avUpload');inp.onchange=()=>{const fs=[...inp.files];let left=fs.length;fs.forEach(f=>{const r=new FileReader();r.onload=()=>{downsize(r.result,u=>{T.uploads.push(u);if(--left===0){save();pickAvatar(i)}})};r.readAsDataURL(f)});inp.value=''};inp.click()}}
+function downsize(src,cb){const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=160;c.width=c.height=s;const g=c.getContext('2d'),m=Math.min(im.width,im.height);g.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,s,s);cb(c.toDataURL('image/jpeg',.85))};im.onerror=()=>cb(src);im.src=src}
+
+// ================= DATA =================
+const MYST=[
+ {pts:[40,30,20,10],clues:[['pod','Pods are harvested from tropical trees.'],['sunbeans','The beans are dried in the sun.'],['grinder','The beans are roasted and ground into a paste.'],['mould','The paste is mixed with sugar and poured into moulds.']],ans:['chocolate','Chocolate']},
+ {pts:[40,30,20,10],clues:[['wheat','A crop is harvested and taken to a mill.'],['flour','The grain is ground into a fine powder.'],['bowl','The powder is mixed with water and yeast.'],['oven','The dough is baked in a hot oven.']],ans:['bread','Bread']},
+ {pts:[40,30,20,10],clues:[['cotton','Soft white fibres are picked from plants.'],['spool','The fibres are cleaned and spun into thread.'],['fabric','The thread is woven into fabric and dyed.'],['scissors','The fabric is cut into pieces and sewn.']],ans:['tshirt','A T-shirt']}
+];
+const FLIPS=[['dig','dug','Clay is dug from the ground.'],['grind','ground','The beans are ground into a paste.'],['feed','fed','The pulp is fed into a machine.'],['put','put','The clay is put through a metal grid.'],['cut','cut','The clay is cut with a wire cutter.'],['spin','spun','The fibres are spun into thread.'],['weave','woven','The thread is woven into fabric.'],['take','taken','The wheat is taken to a mill.']];
+const SETS={
+ passive:{pts:10,pre:'Active',items:[
+  {icon:'bottle',stem:'Workers collect used glass bottles from homes.',o:['Used glass bottles are collected from homes.','Used glass bottles is collected from homes.','Used glass bottles are collect from homes.'],exp:'Plural subject → are + VpII (collected). No "by workers".'},
+  {icon:'bottle',stem:'A machine sorts the bottles by colour.',o:['The bottles are sorted by colour.','The bottles are sorting by colour.','The bottles are sort by colour.'],exp:'are + sorted (VpII), not -ing and not V0.'},
+  {icon:'bottle',stem:'They wash the bottles with hot water.',o:['The bottles are washed with hot water.','The bottles is washed with hot water.','The bottles are washing with hot water.'],exp:'"The bottles" is plural → are washed.'},
+  {icon:'crush',stem:'A crusher breaks the glass into small pieces.',o:['The glass is broken into small pieces.','The glass is broke into small pieces.','The glass are broken into small pieces.'],exp:'break → broke → broken (VpII). "The glass" is uncountable → is.'},
+  {icon:'heat',stem:'They melt the pieces in a furnace at 1,500°C.',o:['The pieces are melted in a furnace at 1,500°C.','The pieces are melt in a furnace at 1,500°C.','The pieces are melting in a furnace at 1,500°C.'],exp:'are + melted. Keep the exact number: 1,500°C.'},
+  {icon:'package',stem:'Lorries deliver the new bottles to shops.',o:['The new bottles are delivered to shops.','The new bottles is delivered to shops.','The new bottles are deliver to shops.'],exp:'are + delivered.'}]},
+ verbs:{pts:10,pre:'',items:[
+  {icon:'grinder',stem:'The roasted beans are ____ into a smooth paste.',o:['ground','grinded'],exp:'grind → ground → ground (irregular).'},
+  {icon:'add',stem:'Sand and water are ____ to the clay.',o:['added','removed'],exp:'add something to something.'},
+  {icon:'remove',stem:'The ink is ____ from the pulp.',o:['removed','added'],exp:'remove something from something.'},
+  {icon:'heat',stem:'The bricks are ____ in a kiln at 1,300°C.',o:['fired','filtered'],exp:'fire = heat at a very high temperature (bricks, pottery).'},
+  {icon:'dry',stem:'The wet bricks are ____ in an oven for 24–48 hours.',o:['dried','pressed'],exp:'A drying oven → dried.'},
+  {icon:'feed',stem:'The clean pulp is ____ into a machine.',o:['fed','feeded'],exp:'feed → fed → fed (irregular).'},
+  {icon:'crush',stem:'The limestone is ____ into a fine powder.',o:['crushed','packaged'],exp:'crush = break into very small pieces.'},
+  {icon:'transfer',stem:'The filtered pulp is ____ to a cleaning tank.',o:['transferred','mixed'],exp:'transfer something to a place = move it there.'}]},
+ intro:{pts:10,pre:'The provided diagram illustrates how …',items:[
+  {stem:'Choose the best ending.',o:['used paper is recycled into new paper.','people recycle used paper into new one.','used paper recycles itself into new paper.'],exp:'Man-made process → passive: used paper is recycled into new paper.'}]},
+ overview:{pts:10,pre:'',items:[
+  {stem:'Which overview covers the whole process?',o:['Overall, the process begins with used paper on a conveyor belt and ends with rolls of recycled paper being produced.','Overall, used paper is mixed with water and chemicals, filtered, cleaned with soap and air, and then pressed by heated rollers.','Overall, there are four main phases, starting with turning used paper into pulp, followed by filtering and cleaning it, and ending with drying it into recycled paper.'],exp:'The first one forgets the middle stages. The second is a list of details. The third gives the big picture: number of phases + first + middle + last.'}]}
+};
+const VERBS=[
+ [['crush','','The limestone is crushed into a fine powder.','nghiền nát'],['grind','→ ground','The roasted beans are ground into a paste.','xay mịn, nghiền mịn'],['mix','… with …','Used paper is mixed with water and chemicals.','trộn'],['add','… to …','Sand and water are added to the clay.','thêm vào']],
+ [['feed','… into … (fed)','The clean pulp is fed into a machine.','đưa vào (máy)'],['transfer','… to …','The filtered pulp is transferred to a cleaning tank.','chuyển sang'],['filter','','The pulp is filtered to remove large pieces.','lọc'],['remove','… from …','The ink is removed from the pulp.','loại bỏ']],
+ [['fire','(in a kiln)','The bricks are fired in a kiln at up to 1,300°C.','nung'],['dry','','The bricks are dried in an oven for 24–48 hours.','sấy khô'],['press','','The pulp is pressed by heated rollers.','ép'],['package','and deliver','Finally, the bricks are packaged and delivered.','đóng gói và vận chuyển']]
+];
+const VICON=[['crush','grinder','bowl','add'],['feed','transfer','filter','remove'],['heat','dry','press','package']];
+const MODEL={
+ p1:[{s:[1,2],h:`<b class="lk">With regard to the initial stages involved in the process of recycling paper</b>, used paper <b class="pv">is placed</b> on a conveyor belt and <b class="pv">carried</b> to a large tank, <b class="lk">where</b> it <b class="pv">is mixed</b> with water and chemicals to make pulp.`},
+     {s:[3],h:`This pulp <b class="pv">is then piped</b> through a valve into a filter, <b class="lk">after which</b> the filtered pulp is ready to <b class="pv">be cleaned</b>.`}],
+ p2:[{s:[4],h:`<b class="lk">Looking at the remaining stages</b>, the filtered pulp <b class="pv">is transferred</b> to a cleaning tank, <b class="lk">where</b> water and soap <b class="pv">are added</b> and air <b class="pv">is pumped</b> in by an air pump.`},
+     {s:[4],h:`<b class="lk">During this stage</b>, the ink <b class="pv">is separated</b> from the pulp and <b class="pv">removed</b>.`},
+     {s:[5],h:`<b class="lk">Once</b> the pulp <b class="pv">has been cleaned</b>, it <b class="pv">is fed</b> into a machine with two heated rollers, <b class="lk">where</b> it <b class="pv">is pressed</b> and <b class="pv">dried</b> <b class="lk">while</b> excess water <b class="pv">is drained</b> away.`},
+     {s:[6],h:`<b class="lk">Finally</b>, the pulp comes out as rolls of recycled paper.`}]
+};
+const TOOLKIT=[
+ ['…, where + passive','… to a large tank, <b>where</b> it is mixed with water.'],
+ ['Once + has / have been VpII, …','<b>Once</b> the pulp <b>has been cleaned</b>, it is fed into a machine.'],
+ ['Having been VpII, …','<b>Having been dried</b>, the bricks are fired in a kiln.'],
+ ['… before being VpII','The bricks are cooled <b>before being packaged</b>.'],
+ ['…, during which …','The bricks are heated, <b>during which</b> the temperature rises to 1,300°C.'],
+ ['… so that / in order to …','Air is pumped in <b>so that</b> the ink can be removed.'],
+ ['…, after which …','Body paragraphs only · use it <b>once</b> at most']
+];
+const JOINS=[
+ ['The clay is put through a metal grid and a roller. Sand and water are added there.','where','The clay is put through a metal grid and a roller, where sand and water are added.'],
+ ['The bricks are dried. Then they are fired in a kiln.','Having been','Having been dried, the bricks are fired in a kiln.'],
+ ['The bricks are cooled. Then they are packaged.','before being','The bricks are cooled before being packaged.'],
+ ['The pulp is cleaned. Then it is fed into a machine.','Once','Once the pulp has been cleaned, it is fed into a machine.'],
+ ['Air is pumped into the tank. The ink can be removed.','so that','Air is pumped into the tank so that the ink can be removed.'],
+ ['The bricks are heated in a kiln. The temperature rises from 200°C to 1,300°C.','during which','The bricks are heated in a kiln, during which the temperature rises from 200°C to 1,300°C.']
+];
+const ERRS=[
+ {t:['The','clay','is','dig','from','the','ground','by','a','digger.'],w:3,fix:'dig → dug (is + VpII)'},
+ {t:['Next,','sand','and','water','is','added','to','the','clay.'],w:4,fix:'is → are (sand and water = plural)'},
+ {t:['The','bricks','are','drying','in','an','oven','for','24','to','48','hours.'],w:3,fix:'are drying → are dried (passive)'},
+ {t:['The','bricks','are','put','into','a','kiln,','where','heat them','to','1,300°C.'],w:8,fix:'where heat them → where they are heated'},
+ {t:['Overall,','there','are','seven','stages,','beginning','with','dig','the','clay.'],w:7,fix:'with dig → with digging (preposition + V-ing)'},
+ {t:['Having cooled,','the','bricks','are','packaged','and','delivered.'],w:0,fix:'Having cooled → Having been cooled'},
+ {t:['After','the','pulp','has cleaned,','it','is','fed','into','a','machine.'],w:3,fix:'has cleaned → has been cleaned'},
+ {t:['Finally,','the','bricks','are','packaged','before','deliver.'],w:6,fix:'before deliver → before being delivered'}
+];
+const BUILD={
+ bio:{dg:'bricks',pts:20,items:[
+  {lbl:'Introduction',s:[1,2,3,4,5,6,7],kw:['diagram','bricks','manufacture','building industry'],need:'The provided diagram illustrates how + S + V',chunks:['The provided diagram','illustrates how','bricks are manufactured','for the building industry.']},
+  {lbl:'Overview',s:[1,2,3,4,5,6,7],kw:['7 stages','digging clay','shaping → cooling','packaging & delivery'],need:'Overall, … beginning with … followed by … and ending with …',chunks:['Overall, there are seven stages in the process,','beginning with digging clay from the ground,','followed by shaping, drying, firing','and cooling the bricks,','and ending with packaging and delivery.']}]},
+ bbody:{dg:'bricks',pts:20,items:[
+  {lbl:'Body 1 · Sentence 1',s:[1,2],kw:['clay','dig','digger','metal grid + roller','sand + water'],need:'With regard to the initial stages involved in … · where',chunks:['With regard to the initial stages involved in the process of brick making,','clay is dug from the ground by a large digger','and put through a metal grid and a roller,','where sand and water are added.']},
+  {lbl:'Body 1 · Sentence 2',s:[3],kw:['mixture','shape','mould','OR','wire cutter'],need:'either … or …',chunks:['The mixture is then','either placed into a mould','or cut into bricks','with a wire cutter.']},
+  {lbl:'Body 1 · Sentence 3',s:[4],kw:['bricks','dry','drying oven','24–48 hours'],need:'Once + have been VpII',chunks:['Once the bricks have been shaped,','they are dried','in a drying oven','for 24 to 48 hours.']},
+  {lbl:'Body 2 · Sentence 1',s:[5],kw:['bricks','heat','kiln','200°C → 1,300°C'],need:'Looking at the remaining stages, … · during which',chunks:['Looking at the remaining stages,','the bricks are heated in a kiln,','during which the temperature rises','from 200°C to 1,300°C.']},
+  {lbl:'Body 2 · Sentence 2',s:[6],kw:['bricks','cool','cooling chamber','48–72 hours'],need:'Having been VpII, …',chunks:['Having been fired,','the bricks are left to cool','in a cooling chamber','for 48 to 72 hours.']},
+  {lbl:'Body 2 · Sentence 3',s:[7],kw:['bricks','package','deliver'],need:'Finally, … before being VpII',chunks:['Finally,','the bricks are packaged','before being delivered.']}]}
+};
+
+// ================= COMPONENTS =================
+function initIcons(root=document){$$('[data-icon]',root).forEach(el=>{if(!el.firstChild)el.innerHTML=svgIcon(el.dataset.icon)})}
+function initDiagrams(root=document){$$('.dgwrap[data-dg]',root).forEach(el=>{if(!el.firstChild)el.innerHTML=DIAGRAMS[el.dataset.dg]()})}
+function focusStages(svg,list){if(!svg)return;if(!list||!list.length){svg.classList.remove('focus');return}svg.classList.add('focus');$$('.stg',svg).forEach(g=>g.classList.toggle('on',list.includes(+g.dataset.s)))}
+
+// generic question rows
+document.addEventListener('click',e=>{const q=e.target.closest('.award')?null:e.target.closest('.qrow');if(q){q.classList.toggle('open');if(q.classList.contains('open'))play('ting');else play('tick')}
+ const s=e.target.closest('[data-show]');if(s){const t=$(s.dataset.show);t.classList.toggle('hid');play(t.classList.contains('hid')?'tick':'ting2')}
+ const l=e.target.closest('[data-lang]');if(l){$(l.dataset.lang).classList.toggle('lang');play('pop')}});
+
+// warm-up mystery
+function initMyst(el){const m=MYST[+el.dataset.myst];let open=0;
+ el.innerHTML=m.clues.map(([ic,tx],k)=>`<div class="clue" data-k="${k}"><div class="in"><div class="fa">${k+1}<span>Clue · ${m.pts[k]} pts</span></div><div class="ba">${svgIcon(ic)}<div>${tx}</div></div></div></div>`).join('')+
+ `<div class="col" style="justify-content:space-between"><div class="ans" style="flex:1"><div class="ans-in muted" style="font-weight:700">?</div></div><div class="ptsnow" style="text-align:center">Points now: <b class="pn">–</b></div><div class="aw-box"></div><button class="btn coral sm sa">Show answer</button></div>`;
+ const upd=()=>{const v=open?m.pts[open-1]:0;$('.pn',el).textContent=open?v:'–';$('.aw-box',el).innerHTML=open?awardBar(v,'Right answer?'):'<div class="muted" style="font-size:.7em;text-align:center">Open clue 1 to start</div>'};
+ $$('.clue',el).forEach(c=>c.onclick=()=>{const k=+c.dataset.k;if(k!==open||c.classList.contains('f'))return;c.classList.add('f');open++;play('flip');upd()});
+ $('.sa',el).onclick=()=>{$$('.clue',el).forEach(c=>c.classList.add('f'));$('.ans',el).innerHTML=`${svgIcon(m.ans[0])}<div class="anm">${m.ans[1]}</div>`;play('win')};upd()}
+
+// flip cards
+function initFlips(){$('#flips').innerHTML=FLIPS.map(([a,b,ex])=>`<div class="flip"><div class="in"><div class="fa">${a}<span>V0</span></div><div class="ba">${b}<span>${ex}</span></div></div></div>`).join('');$$('#flips .flip').forEach(f=>f.onclick=()=>{f.classList.toggle('f');play(f.classList.contains('f')?'ting':'flip')})}
+
+// MCQ (one item per screen, options shuffled)
+function initMCQ(el){const set=SETS[el.dataset.set];const order=set.items.length>1?shuffle(set.items.map((_,i)=>i)):[0];let p=0;const state={};
+ const draw=()=>{const it=set.items[order[p]],st=state[p]||(state[p]={opts:shuffle(it.o.map((t,i)=>({t,ok:i===0}))),done:false,tried:[]});
+  const stem=it.stem.replace('____','<span class="gap">?</span>');
+  el.innerHTML=`<div class="mq-top"><span class="tag">${order.length>1?`Question ${p+1} / ${order.length}`:'Choose'}</span><div class="dots">${order.map((_,k)=>`<i class="${state[k]&&state[k].done?'d':''} ${k===p?'c':''}"></i>`).join('')}</div></div>
+  <div class="row" style="flex-wrap:nowrap;gap:1.4vw">${it.icon?`<div style="width:6vw;flex:none">${svgIcon(it.icon)}</div>`:''}<div style="flex:1">${set.pre?`<div class="mq-pre">${set.pre}</div>`:''}<div class="mq-stem">${stem}</div></div></div>
+  <div class="mq-opts">${st.opts.map((o,k)=>`<button class="opt ${st.done&&o.ok?'ok':''} ${st.tried.includes(k)?'no':''}" data-k="${k}"><span class="l">${'ABC'[k]}</span><span>${o.t}</span></button>`).join('')}</div>
+  <div class="mq-exp">${st.done?it.exp:''}</div><div class="aw-slot">${st.done&&!st.awarded?awardBar(set.pts):''}</div>
+  ${order.length>1?`<div class="mq-nav"><button class="btn ghost sm prv">Previous</button><button class="btn sm nx">Next question</button></div>`:''}`;
+  $$('.opt',el).forEach(b=>b.onclick=()=>{if(st.done)return;const k=+b.dataset.k;if(st.opts[k].ok){st.done=true;play('ting2');draw();if(it.stem.includes('____'))$('.gap',el).textContent=st.opts[k].t}else{st.tried.push(k);play('wrong');b.classList.add('no')}});
+  if(st.done&&it.stem.includes('____'))$('.gap',el).textContent=st.opts.find(o=>o.ok).t;
+  const sl=$('.aw-slot',el);if(sl)sl.addEventListener('click',e=>{if(e.target.closest('.aw'))st.awarded=true});
+  if(order.length>1){$('.prv',el).onclick=()=>{if(p>0){p--;draw()}};$('.nx',el).onclick=()=>{if(p<order.length-1){p++;draw()}}}};
+ draw()}
+
+// verb cards
+function initVerbs(el){const g=+el.dataset.verbs;el.innerHTML=VERBS[g].map(([w,pat,ex,vi],k)=>`<div class="card vc">${svgIcon(VICON[g][k])}<div><div class="w">${w} <i>${pat}</i></div><div class="e">${ex}</div><div class="m">${vi}</div></div></div>`).join('');
+ $$('.vc',el).forEach(c=>c.onclick=()=>{if(c.classList.contains('s2')){c.classList.remove('s1','s2');play('tick')}else if(c.classList.contains('s1')){c.classList.replace('s1','s2');play('pop')}else{c.classList.add('s1');play('ting')}})}
+
+// model sentence reveal + diagram highlight
+function initModel(el){const sents=MODEL[el.dataset.model];let cur=-1;
+ el.innerHTML=`<div class="dgwrap">${DIAGRAMS[el.dataset.dg]()}</div><div class="pane" style="display:flex;flex-direction:column"><div class="sents" style="flex:1">${sents.map((s,k)=>`<div class="sent later" data-k="${k}">${s.h}</div>`).join('')}<div class="muted hint" style="text-align:center;margin-top:2em">Look at the highlighted area. Say the sentence first, then reveal it.</div></div>
+ <div class="row" style="justify-content:space-between;margin-top:.6em"><span class="legend"><span class="a">■ passive verb</span> · <span class="b">■ linking</span></span><div class="row"><button class="btn ghost sm lg">Colours</button><button class="btn ghost sm bk">Back</button><button class="btn coral sm nx">Next sentence</button></div></div></div>`;
+ const svg=$('svg',el),items=$$('.sent',el);
+ const show=k=>{cur=k;items.forEach((it,i)=>{it.classList.toggle('later',i>k);it.classList.toggle('cur',i===k)});$('.hint',el).style.display=k<0?'block':'none';focusStages(svg,k>=0?sents[k].s:sents[0].s)};
+ $('.nx',el).onclick=()=>{if(cur<sents.length-1){show(cur+1);play('ting')}};
+ $('.bk',el).onclick=()=>{if(cur>-1){show(cur-1);play('tick')}};
+ $('.lg',el).onclick=()=>{$('.sents',el).classList.toggle('lang');play('pop')};
+ items.forEach((it,i)=>it.onclick=()=>{if(i<=cur){items.forEach(x=>x.classList.remove('cur'));it.classList.add('cur');focusStages(svg,sents[i].s)}});
+ show(-1)}
+
+// toolkit + joins
+function initToolkit(){$('#toolkit').innerHTML=TOOLKIT.map(([h,ex],k)=>`<div><div style="font-weight:800;color:${k===6?'var(--red)':'var(--coral-d)'}">${h}</div><div style="font-size:.92em">${ex}</div></div>`).join('');
+ $('#joins').innerHTML=JOINS.map(([a,w,ans],k)=>`<div class="qrow jq" style="display:block"><div style="display:flex;gap:.6em"><div class="qn">${k+1}</div><div>${a} <span class="tag">${w}</span></div></div><div class="qa">${ans.replace(new RegExp('('+w.replace(/\s+/g,'\\s+')+'|has been|have been)','i'),'<u>$1</u>')}</div><div class="jaw" style="display:none;margin-top:.4em"></div></div>`).join('');
+ $$('#joins .jq').forEach(q=>q.addEventListener('click',e=>{if(e.target.closest('.award'))return;setTimeout(()=>{const s=$('.jaw',q);if(q.classList.contains('open')){if(!s.innerHTML)s.innerHTML=awardBar(15);s.style.display='block'}else s.style.display='none'})}))}
+
+// error hunt
+function initErr(){const el=$('#eh');const order=shuffle(ERRS.map((_,i)=>i));let p=0;const st={};
+ const draw=()=>{const it=ERRS[order[p]],s=st[p]||(st[p]={done:false,bad:[]});
+  el.innerHTML=`<div class="mq-top"><span class="tag">Sentence ${p+1} / ${order.length}</span><div class="dots">${order.map((_,k)=>`<i class="${st[k]&&st[k].done?'d':''} ${k===p?'c':''}"></i>`).join('')}</div></div>
+  <div class="sen">${it.t.map((w,k)=>`<span class="tok ${s.done&&k===it.w?'right':''} ${s.bad.includes(k)?'bad':''}" data-k="${k}">${w}</span>`).join(' ')}</div>
+  <div class="fix">${s.done?it.fix:''}</div><div style="min-height:2.4em">${s.done&&!s.aw?awardBar(10):''}</div>
+  <div class="mq-nav"><button class="btn ghost sm prv">Previous</button><button class="btn ghost sm rv">Show the mistake</button><button class="btn sm nx">Next sentence</button></div>`;
+  $$('.tok',el).forEach(t=>t.onclick=()=>{if(s.done)return;const k=+t.dataset.k;if(k===it.w){s.done=true;play('ting2');draw()}else{s.bad.push(k);play('bonk');t.classList.add('bad')}});
+  $('.rv',el).onclick=()=>{if(!s.done){s.done=true;s.aw=true;play('pop');draw()}};
+  el.querySelector('.award')&&el.querySelector('.award').addEventListener('click',()=>s.aw=true);
+  $('.prv',el).onclick=()=>{if(p>0){p--;draw()}};$('.nx',el).onclick=()=>{if(p<order.length-1){p++;draw()}}};draw()}
+
+// sentence builder
+function initBuild(el){const B=BUILD[el.dataset.build];let p=0;const st={};
+ el.innerHTML=`<div class="dgwrap">${DIAGRAMS[B.dg]()}</div><div class="right"></div>`;const svg=$('svg',el),R=$('.right',el);
+ const draw=()=>{const it=B.items[p],s=st[p]||(st[p]={shuf:shuffle(it.chunks.map((_,i)=>i)),ans:[],chunks:false,model:false});
+  focusStages(svg,it.s.length>=7?[]:it.s);
+  R.innerHTML=`<div class="mq-top"><span class="tag">${it.lbl}</span><div class="dots">${B.items.map((_,k)=>`<i class="${st[k]&&st[k].model?'d':''} ${k===p?'c':''}"></i>`).join('')}</div></div>
+  <div><div class="muted" style="font-size:.72em;font-weight:700">KEY WORDS</div><div class="kws">${it.kw.map(k=>`<span class="kw">${k}</span>`).join('')}</div></div>
+  <div><div class="muted" style="font-size:.72em;font-weight:700">MUST USE</div><div class="need">${it.need}</div></div>
+  <div class="muted" style="font-size:.8em">Write the sentence in your notebook. Then read it aloud.</div>
+  <div class="row" style="justify-content:flex-start"><button class="btn ghost sm ch">${s.chunks?'Hide chunks':'Hint: chunks'}</button><button class="btn coral sm md">Show model</button></div>
+  ${s.chunks&&!s.model?`<div class="chunks">${s.shuf.filter(i=>!s.ans.includes(i)).map(i=>`<span class="chunk" data-i="${i}">${it.chunks[i]}</span>`).join('')}</div><div class="answer">${s.ans.map(i=>`<span class="chunk" data-i="${i}">${it.chunks[i]}</span>`).join('')||'<span class="muted" style="font-size:.75em">Click the chunks in the right order</span>'}</div><div class="row" style="justify-content:flex-start"><button class="btn teal sm ck">Check</button><button class="btn ghost sm rs">Reset</button></div>`:''}
+  <div class="model ${s.model?'on':''}">${it.chunks.join(' ')}</div>
+  <div class="aw-slot">${s.model&&!s.aw?awardBar(B.pts,'Good sentence?'):''}</div>
+  <div class="mq-nav"><button class="btn ghost sm prv">Previous</button><button class="btn sm nx">Next sentence</button></div>`;
+  $('.ch',R).onclick=()=>{s.chunks=!s.chunks;play('pop');draw()};
+  $('.md',R).onclick=()=>{s.model=true;play('ting2');draw()};
+  $$('.chunks .chunk',R).forEach(c=>c.onclick=()=>{s.ans.push(+c.dataset.i);play('tick');draw()});
+  $$('.answer .chunk',R).forEach(c=>c.onclick=()=>{s.ans=s.ans.filter(x=>x!==+c.dataset.i);play('tick');draw()});
+  if(s.chunks&&!s.model){$('.ck',R).onclick=()=>{const a=$('.answer',R);if(s.ans.length===it.chunks.length&&s.ans.every((v,i)=>v===i)){a.classList.add('ok');play('ting2');s.model=true;setTimeout(draw,700)}else{a.classList.remove('no');void a.offsetWidth;a.classList.add('no');play('wrong')}};$('.rs',R).onclick=()=>{s.ans=[];draw()}}
+  const sl=$('.aw-slot',R);sl.addEventListener('click',e=>{if(e.target.closest('.aw'))s.aw=true});
+  $('.prv',R).onclick=()=>{if(p>0){p--;draw()}};$('.nx',R).onclick=()=>{if(p<B.items.length-1){p++;draw()}}};
+ draw()}
+
+// podium
+function podium(){const ts=active().map((t,i)=>({t,i})).sort((a,b)=>b.t.score-a.t.score);const max=Math.max(1,...ts.map(x=>x.t.score));
+ $('#pod').innerHTML=ts.map((x,r)=>`<div class="p"><span class="av">${avHTML(x.t)}</span><div class="n" style="color:${COLORS[x.i]}">${r===0?'1st':r===1?'2nd':r===2?'3rd':'4th'} · ${esc(x.t.name)}</div><div class="bar" style="background:${COLORS[x.i]};height:0">${x.t.score}</div></div>`).join('');
+ requestAnimationFrame(()=>setTimeout(()=>$$('#pod .bar').forEach((b,k)=>b.style.height=(8+34*ts[k].t.score/max)+'vh'),60))}
+function confetti(){const cols=['#E8735A','#2F6FDB','#2A9D8F','#F6C343','#9B5DE5'];for(let i=0;i<90;i++){const c=document.createElement('div');c.className='conf';c.style.left=Math.random()*100+'vw';c.style.background=cols[i%5];c.style.animationDuration=(2+Math.random()*2)+'s';c.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),5000)}}
+
+// ================= NAVIGATION =================
+const slides=$$('.slide');let cur=0;
+const INIT={setup:initSetup};
+function go(i){i=Math.max(0,Math.min(slides.length-1,i));slides[cur].classList.remove('active');cur=i;const s=slides[cur];s.classList.add('active');
+ $('#count').textContent=(cur+1)+' / '+slides.length;$('#sec').textContent=s.dataset.sec||'';
+ if(!s._done){s._done=true;if(s.dataset.init)INIT[s.dataset.init](s);initIcons(s);initDiagrams(s);
+  $$('.myst',s).forEach(initMyst);$$('.mcq',s).forEach(initMCQ);$$('.verbs',s).forEach(initVerbs);$$('.mr',s).forEach(initModel);$$('.bld',s).forEach(initBuild);
+  if($('#flips',s))initFlips();if($('#toolkit',s))initToolkit();if($('#eh',s))initErr()}
+ if(s.dataset.onshow==='podium')podium();
+ if(s.dataset.init==='setup')drawSetup()}
+$('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;if($('#ov').classList.contains('on')){if(e.key==='Escape'&&!$('#mbox').dataset.lock)closeModal();return}
+ if(e.key==='ArrowRight'||e.key==='PageDown')go(cur+1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(cur-1)});
+$('#bTeams').onclick=()=>go(1);$('#bCall').onclick=callStudent;
+$('#bSound').onclick=()=>{SOUND=!SOUND;$('#swave').style.display=SOUND?'':'none';$('#bSound span').textContent=SOUND?'Sound':'Muted';if(SOUND)play('pop')};
+$('#celebrate').onclick=()=>{play('win');confetti()};
+// re-render award bars when called team changes (highlight)
+load();renderScore();go(0);
+
+</script>
+</body>
+</html>
